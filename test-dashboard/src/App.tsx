@@ -76,9 +76,21 @@ function App() {
   };
 
   const runBackendTests = async (): Promise<TestResult[]> => {
+    console.log('🔄 Starting backend tests fetch...');
     // Get real test status from backend
     try {
-      const response = await fetch('http://localhost:8000/test-status');
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
+      const response = await fetch('http://localhost:8000/test-status', {
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      clearTimeout(timeoutId);
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -130,11 +142,24 @@ function App() {
         });
       });
       
-      console.log(`Backend tests loaded: ${results.length} tests, ${backendStatus.status} status`);
+      console.log(`✅ Backend tests loaded successfully: ${results.length} tests, ${backendStatus.status} status`);
+      console.log('API response time:', data.cached ? 'cached' : 'fresh');
       return results;
       
     } catch (error) {
       console.error('Failed to fetch test status:', error);
+      console.error('Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      
+      // Check if this is a timeout or network error
+      const errorType = error.name === 'AbortError' ? 'timeout' : 'network';
+      const errorMessage = error.name === 'AbortError' 
+        ? 'Request timed out after 30 seconds' 
+        : `Failed to fetch: ${error.message}`;
+      
       // Fallback to showing connection error
       return [{
         id: 'backend-error',
@@ -144,7 +169,7 @@ function App() {
         duration: 0,
         file: 'test_main.py',
         description: 'Test backend connection',
-        error: `Failed to connect to backend API: ${error.message}`
+        error: `Failed to connect to backend API (${errorType}): ${errorMessage}`
       }];
     }
   };
