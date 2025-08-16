@@ -1,240 +1,345 @@
 {
   "ocr_and_visual": {
-    "prompt": "Analyze this screenshot and provide a JSON response with the following structure:\n\n{\n  \"extracted_text\": \"Extract ALL visible text from the image, preserving the exact wording\",\n  \"visual_description\": \"Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors.\"\n}\n\nFor the visual description, focus on:\n- What type of content/interface this is (document, website, app, etc.)\n- What the main content or purpose appears to be\n- Key information or data being displayed\n- What actions or interactions are available\n- Overall context and meaning\n\nBe thorough and accurate. Return only valid JSON.",
-    "version": "1.0",
-    "created_at": "2025-08-16T13:12:33.105617",
-    "quality_scores": [
+    "prompt": "Test prompt for extraction",
+    "version": "2.0",
+    "created_at": "2025-08-16T14:32:03.005449",
+    "quality_scores": [],
+    "versions": [
       {
-        "score": 0.54,
-        "timestamp": "2025-08-16T13:22:08.699070",
-        "metadata": {
-          "filename": "Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
+        "version": "1.0",
+        "prompt": "Analyze this screenshot and provide a JSON response with the following structure:\n\n{\n  \"extracted_text\": \"Extract ALL visible text from the image, preserving the exact wording\",\n  \"visual_description\": \"Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors.\"\n}\n\nFor the visual description, focus on:\n- What type of content/interface this is (document, website, app, etc.)\n- What the main content or purpose appears to be\n- Key information or data being displayed\n- What actions or interactions are available\n- Overall context and meaning\n\nBe thorough and accurate. Return only valid JSON.",
+        "created_at": "2025-08-16T13:12:33.105617",
+        "quality_scores": [
+          {
+            "score": 0.54,
+            "timestamp": "2025-08-16T13:22:08.699070",
+            "metadata": {
+              "filename": "Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.7,
+            "timestamp": "2025-08-16T13:22:52.250247",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
+              "file_hash": "7ce803013ba56511583fe458a4951c4d"
+            }
+          },
+          {
+            "score": 0.49,
+            "timestamp": "2025-08-16T13:22:58.063904",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
+              "file_hash": "e7f1823e7744519278f945b62b3a26a6"
+            }
+          },
+          {
+            "score": 0.54,
+            "timestamp": "2025-08-16T13:23:05.045648",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.66,
+            "timestamp": "2025-08-16T13:23:17.843725",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
+              "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
+            }
+          },
+          {
+            "score": 0.66,
+            "timestamp": "2025-08-16T13:23:32.790848",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
+              "file_hash": "6412f718445320eeabdbcb25785dd4ae"
+            }
+          },
+          {
+            "score": 0.21,
+            "timestamp": "2025-08-16T13:31:03.772785",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
+              "file_hash": "7ce803013ba56511583fe458a4951c4d"
+            }
+          },
+          {
+            "score": 0.47,
+            "timestamp": "2025-08-16T13:31:09.707455",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
+              "file_hash": "e7f1823e7744519278f945b62b3a26a6"
+            }
+          },
+          {
+            "score": 0.52,
+            "timestamp": "2025-08-16T13:31:16.583467",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.61,
+            "timestamp": "2025-08-16T13:31:28.957738",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
+              "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
+            }
+          },
+          {
+            "score": 0.68,
+            "timestamp": "2025-08-16T13:31:44.425309",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
+              "file_hash": "6412f718445320eeabdbcb25785dd4ae"
+            }
+          },
+          {
+            "score": 0.65,
+            "timestamp": "2025-08-16T13:36:39.049053",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
+              "file_hash": "7ce803013ba56511583fe458a4951c4d"
+            }
+          },
+          {
+            "score": 0.56,
+            "timestamp": "2025-08-16T13:36:46.159195",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
+              "file_hash": "e7f1823e7744519278f945b62b3a26a6"
+            }
+          },
+          {
+            "score": 0.52,
+            "timestamp": "2025-08-16T13:36:52.960511",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.66,
+            "timestamp": "2025-08-16T13:37:06.282083",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
+              "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
+            }
+          },
+          {
+            "score": 0.64,
+            "timestamp": "2025-08-16T13:37:21.243766",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
+              "file_hash": "6412f718445320eeabdbcb25785dd4ae"
+            }
+          },
+          {
+            "score": 0.69,
+            "timestamp": "2025-08-16T13:48:21.135844",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
+              "file_hash": "7ce803013ba56511583fe458a4951c4d"
+            }
+          },
+          {
+            "score": 0.55,
+            "timestamp": "2025-08-16T13:48:27.665486",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
+              "file_hash": "e7f1823e7744519278f945b62b3a26a6"
+            }
+          },
+          {
+            "score": 0.52,
+            "timestamp": "2025-08-16T13:48:34.905872",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.66,
+            "timestamp": "2025-08-16T13:48:48.191034",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
+              "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
+            }
+          },
+          {
+            "score": 0.71,
+            "timestamp": "2025-08-16T13:49:02.079375",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
+              "file_hash": "6412f718445320eeabdbcb25785dd4ae"
+            }
+          },
+          {
+            "score": 0.69,
+            "timestamp": "2025-08-16T14:00:27.375984",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
+              "file_hash": "7ce803013ba56511583fe458a4951c4d"
+            }
+          },
+          {
+            "score": 0.54,
+            "timestamp": "2025-08-16T14:00:33.572868",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
+              "file_hash": "e7f1823e7744519278f945b62b3a26a6"
+            }
+          },
+          {
+            "score": 0.54,
+            "timestamp": "2025-08-16T14:00:40.521550",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.66,
+            "timestamp": "2025-08-16T14:00:52.711673",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
+              "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
+            }
+          },
+          {
+            "score": 0.68,
+            "timestamp": "2025-08-16T14:01:07.014098",
+            "metadata": {
+              "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
+              "file_hash": "6412f718445320eeabdbcb25785dd4ae"
+            }
+          },
+          {
+            "score": 0.26,
+            "timestamp": "2025-08-16T14:14:09.061874",
+            "metadata": {
+              "filename": "Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.26,
+            "timestamp": "2025-08-16T14:16:16.904097",
+            "metadata": {
+              "filename": "Ensuring Quality.png",
+              "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+            }
+          },
+          {
+            "score": 0.67,
+            "timestamp": "2025-08-16T14:22:16.192715",
+            "metadata": {
+              "filename": "WhyUseCausalAI.png",
+              "file_hash": "7ce803013ba56511583fe458a4951c4d"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T14:27:50.702886",
+            "metadata": {
+              "filename": "test.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.41,
+            "timestamp": "2025-08-16T14:27:54.110956",
+            "metadata": {
+              "filename": "large.png",
+              "file_hash": "4161b5008a1289270118e24e97c4aa90"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T14:27:54.262476",
+            "metadata": {
+              "filename": "valid1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T14:27:54.270965",
+            "metadata": {
+              "filename": "valid2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.44,
+            "timestamp": "2025-08-16T14:27:56.926578",
+            "metadata": {
+              "filename": "image1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.44,
+            "timestamp": "2025-08-16T14:27:59.458847",
+            "metadata": {
+              "filename": "image2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          }
+        ],
+        "archived_at": "2025-08-16T14:27:59.550079"
       },
       {
-        "score": 0.7,
-        "timestamp": "2025-08-16T13:22:52.250247",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
-          "file_hash": "7ce803013ba56511583fe458a4951c4d"
-        }
-      },
-      {
-        "score": 0.49,
-        "timestamp": "2025-08-16T13:22:58.063904",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
-          "file_hash": "e7f1823e7744519278f945b62b3a26a6"
-        }
-      },
-      {
-        "score": 0.54,
-        "timestamp": "2025-08-16T13:23:05.045648",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
-      },
-      {
-        "score": 0.66,
-        "timestamp": "2025-08-16T13:23:17.843725",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
-          "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
-        }
-      },
-      {
-        "score": 0.66,
-        "timestamp": "2025-08-16T13:23:32.790848",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
-          "file_hash": "6412f718445320eeabdbcb25785dd4ae"
-        }
-      },
-      {
-        "score": 0.21,
-        "timestamp": "2025-08-16T13:31:03.772785",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
-          "file_hash": "7ce803013ba56511583fe458a4951c4d"
-        }
-      },
-      {
-        "score": 0.47,
-        "timestamp": "2025-08-16T13:31:09.707455",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
-          "file_hash": "e7f1823e7744519278f945b62b3a26a6"
-        }
-      },
-      {
-        "score": 0.52,
-        "timestamp": "2025-08-16T13:31:16.583467",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
-      },
-      {
-        "score": 0.61,
-        "timestamp": "2025-08-16T13:31:28.957738",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
-          "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
-        }
-      },
-      {
-        "score": 0.68,
-        "timestamp": "2025-08-16T13:31:44.425309",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
-          "file_hash": "6412f718445320eeabdbcb25785dd4ae"
-        }
-      },
-      {
-        "score": 0.65,
-        "timestamp": "2025-08-16T13:36:39.049053",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
-          "file_hash": "7ce803013ba56511583fe458a4951c4d"
-        }
-      },
-      {
-        "score": 0.56,
-        "timestamp": "2025-08-16T13:36:46.159195",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
-          "file_hash": "e7f1823e7744519278f945b62b3a26a6"
-        }
-      },
-      {
-        "score": 0.52,
-        "timestamp": "2025-08-16T13:36:52.960511",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
-      },
-      {
-        "score": 0.66,
-        "timestamp": "2025-08-16T13:37:06.282083",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
-          "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
-        }
-      },
-      {
-        "score": 0.64,
-        "timestamp": "2025-08-16T13:37:21.243766",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
-          "file_hash": "6412f718445320eeabdbcb25785dd4ae"
-        }
-      },
-      {
-        "score": 0.69,
-        "timestamp": "2025-08-16T13:48:21.135844",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
-          "file_hash": "7ce803013ba56511583fe458a4951c4d"
-        }
-      },
-      {
-        "score": 0.55,
-        "timestamp": "2025-08-16T13:48:27.665486",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
-          "file_hash": "e7f1823e7744519278f945b62b3a26a6"
-        }
-      },
-      {
-        "score": 0.52,
-        "timestamp": "2025-08-16T13:48:34.905872",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
-      },
-      {
-        "score": 0.66,
-        "timestamp": "2025-08-16T13:48:48.191034",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
-          "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
-        }
-      },
-      {
-        "score": 0.71,
-        "timestamp": "2025-08-16T13:49:02.079375",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
-          "file_hash": "6412f718445320eeabdbcb25785dd4ae"
-        }
-      },
-      {
-        "score": 0.69,
-        "timestamp": "2025-08-16T14:00:27.375984",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/WhyUseCausalAI.png",
-          "file_hash": "7ce803013ba56511583fe458a4951c4d"
-        }
-      },
-      {
-        "score": 0.54,
-        "timestamp": "2025-08-16T14:00:33.572868",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/CausalAI-SCM.png",
-          "file_hash": "e7f1823e7744519278f945b62b3a26a6"
-        }
-      },
-      {
-        "score": 0.54,
-        "timestamp": "2025-08-16T14:00:40.521550",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
-      },
-      {
-        "score": 0.66,
-        "timestamp": "2025-08-16T14:00:52.711673",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Best-Opening-Lines.jpg",
-          "file_hash": "ccf1a6ec1de57f84d0b00acf76dfcd99"
-        }
-      },
-      {
-        "score": 0.68,
-        "timestamp": "2025-08-16T14:01:07.014098",
-        "metadata": {
-          "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
-          "file_hash": "6412f718445320eeabdbcb25785dd4ae"
-        }
-      },
-      {
-        "score": 0.26,
-        "timestamp": "2025-08-16T14:14:09.061874",
-        "metadata": {
-          "filename": "Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
-      },
-      {
-        "score": 0.26,
-        "timestamp": "2025-08-16T14:16:16.904097",
-        "metadata": {
-          "filename": "Ensuring Quality.png",
-          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
-        }
-      },
-      {
-        "score": 0.67,
-        "timestamp": "2025-08-16T14:22:16.192715",
-        "metadata": {
-          "filename": "WhyUseCausalAI.png",
-          "file_hash": "7ce803013ba56511583fe458a4951c4d"
-        }
+        "version": "1.0",
+        "prompt": "Test prompt for extraction",
+        "created_at": "2025-08-16T14:27:59.550086",
+        "quality_scores": [
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T14:32:00.014683",
+            "metadata": {
+              "filename": "test.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T14:32:00.312097",
+            "metadata": {
+              "filename": "valid1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T14:32:00.321139",
+            "metadata": {
+              "filename": "valid2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.25,
+            "timestamp": "2025-08-16T14:32:01.742544",
+            "metadata": {
+              "filename": "image1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.25,
+            "timestamp": "2025-08-16T14:32:02.991071",
+            "metadata": {
+              "filename": "image2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          }
+        ],
+        "archived_at": "2025-08-16T14:32:03.005440"
       }
     ]
   }
