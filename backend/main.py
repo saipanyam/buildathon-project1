@@ -27,13 +27,31 @@ from app.models import SearchQuery, SearchResult, ScreenshotMetadata
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    print(f"🔧 Initializing services...")
+    print(f"🔑 API key configured: {bool(settings.ANTHROPIC_API_KEY)}")
+    print(f"🔑 API key length: {len(settings.ANTHROPIC_API_KEY) if settings.ANTHROPIC_API_KEY else 0}")
+    
     try:
-        app.state.claude_service = ClaudeService(api_key=settings.ANTHROPIC_API_KEY)
+        # Initialize Claude service
+        if settings.ANTHROPIC_API_KEY:
+            app.state.claude_service = ClaudeService(api_key=settings.ANTHROPIC_API_KEY)
+            print("✅ Claude service initialized successfully")
+        else:
+            app.state.claude_service = None
+            print("❌ Claude service not initialized - no API key")
+            
+        # Initialize other services
         app.state.search_service = SearchService()
         app.state.evaluation_service = EvaluationService()
         app.state.prompt_manager = PromptManager()
+        print("✅ All other services initialized")
+        
     except Exception as e:
-        print(f"Warning: Failed to initialize some services: {e}")
+        print(f"❌ Warning: Failed to initialize some services: {e}")
+        print(f"❌ Exception type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc()
+        
         # Initialize fallback services
         app.state.claude_service = None
         app.state.search_service = SearchService() if 'SearchService' in globals() else None

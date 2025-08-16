@@ -67,6 +67,18 @@ class Settings(BaseSettings):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
+        # Debug environment variable access
+        print(f"🔍 Environment variables check:")
+        print(f"   - ANTHROPIC_API_KEY in os.environ: {'ANTHROPIC_API_KEY' in os.environ}")
+        print(f"   - ANTHROPIC_API_KEY value: {os.environ.get('ANTHROPIC_API_KEY', 'NOT_SET')[:20]}...")
+        print(f"   - Current self.ANTHROPIC_API_KEY: {self.ANTHROPIC_API_KEY[:20] if self.ANTHROPIC_API_KEY else 'EMPTY'}...")
+        
+        # Explicitly check environment variable first (Heroku Config Vars)
+        env_api_key = os.environ.get('ANTHROPIC_API_KEY')
+        if env_api_key and not self.ANTHROPIC_API_KEY:
+            self.ANTHROPIC_API_KEY = env_api_key
+            print(f"✅ Loaded API key from environment variable")
+        
         # Handle Heroku PORT environment variable
         if not self.PORT and os.environ.get('PORT'):
             self.PORT = int(os.environ.get('PORT'))
@@ -84,6 +96,7 @@ class Settings(BaseSettings):
                         config = json.load(f)
                         if "ANTHROPIC_API_KEY" in config and config["ANTHROPIC_API_KEY"]:
                             self.ANTHROPIC_API_KEY = config["ANTHROPIC_API_KEY"]
+                            print(f"✅ Loaded API key from {settings_path}")
                 except Exception as e:
                     print(f"Warning: Could not load settings from {settings_path}: {e}")
         
@@ -91,5 +104,7 @@ class Settings(BaseSettings):
         if not self.ANTHROPIC_API_KEY or self.ANTHROPIC_API_KEY == "your_anthropic_api_key_here":
             print("⚠️  Warning: ANTHROPIC_API_KEY not configured!")
             print("   Some features may not work without a valid API key")
+        else:
+            print(f"✅ API key configured successfully (length: {len(self.ANTHROPIC_API_KEY)})")
 
 settings = Settings()
