@@ -53,6 +53,12 @@ class Settings(BaseSettings):
     SEARCH_MIN_SCORE: float = 0.3
     SEARCH_MAX_RESULTS: int = 50
     
+    # API Timeout Settings
+    CLAUDE_API_TIMEOUT: float = 45.0
+    CLAUDE_CLIENT_TIMEOUT: float = 60.0
+    CLAUDE_MAX_RETRIES: int = 3
+    CLAUDE_RETRY_DELAY: float = 1.0
+    
     class Config:
         env_file = "vms-yantra.env"
         env_file_encoding = "utf-8"
