@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Visual Memory Search Yantra - AI-powered screenshot search",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build && cd .. && rm -rf backend/static && cp -r frontend/dist backend/static",
+    "build": "npm install && npm run build && rm -rf backend/static && cp -r dist backend/static",
     "heroku-postbuild": "npm run build"
   },
   "engines": {
