@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Eye, FileText, BarChart3, ChevronDown, ChevronUp, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import type { SearchResult } from '../types';
-import { getImageUrl } from '../utils/api';
+import { getImageUrl, safePercentage, formatPercentage } from '../utils/api';
 
 interface ImageCarouselWithFlipProps {
   results: SearchResult[];
@@ -283,7 +283,7 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
                                     <span className="text-xs font-medium text-white">Quality</span>
                                   </div>
                                   <div className={`px-2 py-1 rounded text-xs font-bold border ${getConfidenceColor(result.confidence_score)} bg-black/30`}>
-                                    {(result.confidence_score * 100).toFixed(0)}%
+                                    {formatPercentage(result.confidence_score * 100)}
                                   </div>
                                   <div className="flex items-center gap-1">
                                     {getQualityIcon(getConfidenceLabel(result.confidence_score))}
@@ -322,7 +322,7 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
                                       <div key={idx} className="bg-gray-800/50 rounded p-2 border border-gray-600">
                                         <div className="flex items-center justify-between mb-1">
                                           <span className="text-xs font-medium text-white truncate">{criteria.criteria}</span>
-                                          <span className={`text-xs px-1 py-0.5 rounded ${getConfidenceColor(criteria.percentage / 100)}`}>
+                                          <span className={`text-xs px-1 py-0.5 rounded ${getConfidenceColor(safePercentage(criteria.percentage) / 100)}`}>
                                             {criteria.score}/{criteria.max_score}
                                           </span>
                                         </div>
@@ -330,12 +330,12 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
                                         <div className="mb-1">
                                           <div className="flex justify-between text-xs text-gray-400 mb-1">
                                             <span>Score</span>
-                                            <span>{criteria.percentage}%</span>
+                                            <span>{formatPercentage(criteria.percentage)}</span>
                                           </div>
                                           <div className="w-full bg-gray-700 rounded-full h-1">
                                             <div 
                                               className="bg-gradient-to-r from-red-500 to-red-600 h-1 rounded-full transition-all"
-                                              style={{ width: `${criteria.percentage}%` }}
+                                              style={{ width: `${safePercentage(criteria.percentage)}%` }}
                                             />
                                           </div>
                                         </div>

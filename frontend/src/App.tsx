@@ -20,6 +20,7 @@ function AppContent() {
   const [currentQuery, setCurrentQuery] = useState('');
   const [viewMode, setViewMode] = useState<'carousel' | 'list'>('carousel');
   const [showingSearchResults, setShowingSearchResults] = useState(false);
+  const [showFeatureBoxes, setShowFeatureBoxes] = useState(true);
 
 
   const handleUploadComplete = useCallback((files: any[]) => {
@@ -29,6 +30,7 @@ function AppContent() {
     setShowingSearchResults(false);
     setCurrentQuery('');
     setHasUploadedFiles(true);
+    // Keep feature boxes visible during upload/processing
   }, []);
 
   const handleProcessingStart = useCallback(() => {
@@ -57,6 +59,10 @@ function AppContent() {
         setAllResults(results);
         setIsProcessing(false);
         setExtractionProgress(0);
+        // Hide feature boxes only when we have actual results
+        if (results.length > 0) {
+          setShowFeatureBoxes(false);
+        }
       } catch (error) {
         console.error('Failed to load results:', error);
         setIsProcessing(false);
@@ -169,8 +175,8 @@ function AppContent() {
 
         {/* Search functionality removed - show only extraction results */}
 
-        {/* Features - Only show if no results available yet */}
-        {allResults.length === 0 && (
+        {/* Features - Show until we have actual extraction results */}
+        {showFeatureBoxes && (
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Text Extraction Feature Card */}
             <div className="group relative">

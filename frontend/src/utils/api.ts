@@ -22,3 +22,15 @@ export const getImageUrl = (fileHash: string): string => {
 export const getApiUrl = (endpoint: string): string => {
   return `${getApiBaseUrl()}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
 };
+
+export const safePercentage = (value: number | null | undefined): number => {
+  if (value === null || value === undefined || isNaN(value)) {
+    return 0;
+  }
+  return Math.max(0, Math.min(100, value));
+};
+
+export const formatPercentage = (value: number | null | undefined): string => {
+  const safe = safePercentage(value);
+  return `${safe.toFixed(1)}%`;
+};
