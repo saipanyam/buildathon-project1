@@ -9,11 +9,24 @@ from ..config import settings
 
 class ClaudeService:
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(
-            api_key=api_key,
-            timeout=settings.CLAUDE_CLIENT_TIMEOUT,
-            max_retries=2  # Client-level retry configuration
-        )
+        try:
+            # Simplified client initialization to avoid proxy issues
+            self.client = anthropic.Anthropic(
+                api_key=api_key,
+                timeout=float(settings.CLAUDE_CLIENT_TIMEOUT)
+            )
+            print("✅ Anthropic client initialized successfully")
+        except Exception as e:
+            print(f"❌ Failed to initialize Anthropic client: {e}")
+            print(f"❌ Exception type: {type(e).__name__}")
+            # Try with minimal configuration
+            try:
+                self.client = anthropic.Anthropic(api_key=api_key)
+                print("✅ Anthropic client initialized with minimal config")
+            except Exception as e2:
+                print(f"❌ Failed with minimal config: {e2}")
+                raise e2
+        
         self.model = "claude-3-5-sonnet-20241022"
         self.prompt_manager = PromptManager()
     
