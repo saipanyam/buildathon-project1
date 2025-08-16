@@ -3,4 +3,4 @@ The Buildathon is a multi-stage competition that challenges participants to rapi
 
 ## Project Title
 
--- Project details go here
+-- Project details
