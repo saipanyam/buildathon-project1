@@ -83,12 +83,17 @@ class EvaluationService:
         
         # Calculate weighted scores
         for eval_result, criteria in zip(evaluations, self.rubric):
-            weighted_score = (eval_result.score / eval_result.max_score) * criteria.weight * 100
-            total_score += weighted_score
+            if eval_result.max_score > 0:
+                weighted_score = (eval_result.score / eval_result.max_score) * criteria.weight * 100
+                total_score += weighted_score
             max_total_score += criteria.weight * 100
         
         # Overall confidence score
         confidence_score = total_score / max_total_score if max_total_score > 0 else 0
+        
+        # Ensure confidence_score is not NaN
+        if confidence_score != confidence_score:  # NaN check
+            confidence_score = 0
         
         # Generate overall suggestions
         all_suggestions = []
@@ -108,7 +113,7 @@ class EvaluationService:
                     "criteria": eval.criteria,
                     "score": eval.score,
                     "max_score": eval.max_score,
-                    "percentage": round((eval.score / eval.max_score) * 100, 1) if eval.max_score > 0 else 0,
+                    "percentage": round((eval.score / eval.max_score) * 100, 1) if eval.max_score > 0 and eval.score == eval.score else 0,
                     "reasoning": eval.reasoning,
                     "suggestions": eval.suggestions
                 }

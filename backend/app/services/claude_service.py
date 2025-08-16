@@ -91,14 +91,18 @@ class ClaudeService:
                 )
                 
                 content = response.content[0].text
+                print(f"Claude API raw response length: {len(content)}")
+                print(f"Claude API raw response preview: {content[:200]}...")
                 
                 # Try to parse JSON response first
                 try:
                     json_content = json.loads(content)
                     extracted_text = json_content.get("extracted_text", json_content.get("ocr_text", ""))
                     visual_description = json_content.get("visual_description", "")
+                    print(f"JSON parsing successful: OCR={len(extracted_text)}, Visual={len(visual_description)}")
                     return extracted_text, visual_description
-                except json.JSONDecodeError:
+                except json.JSONDecodeError as e:
+                    print(f"JSON parsing failed: {e}")
                     # Fallback to old format parsing
                     extracted_text = ""
                     visual_description = ""
@@ -114,6 +118,18 @@ class ClaudeService:
                         if len(parts) > 1:
                             visual_description = parts[1].strip()
                     
+                    # If still empty, try more flexible parsing
+                    if not extracted_text and not visual_description:
+                        print("Fallback parsing also failed, trying flexible approach...")
+                        # Look for any substantial text content
+                        lines = content.strip().split('\n')
+                        substantial_lines = [line.strip() for line in lines if len(line.strip()) > 10]
+                        if substantial_lines:
+                            # Use the content as visual description if we can't parse it properly
+                            visual_description = ' '.join(substantial_lines[:3])  # First few substantial lines
+                            print(f"Flexible parsing result: Visual={len(visual_description)}")
+                    
+                    print(f"Fallback parsing result: OCR={len(extracted_text)}, Visual={len(visual_description)}")
                     return extracted_text, visual_description
                 
             except anthropic.APITimeoutError as e:
