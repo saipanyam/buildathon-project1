@@ -41,8 +41,9 @@ class ClaudeService:
                 print("⚠️  Creating fallback service without Claude client")
                 self.client = None
         
-        self.model = "claude-3-5-sonnet-20241022"
+        self.model = settings.MODEL_NAME  # Use configured model for optimal extraction
         self.prompt_manager = PromptManager()
+        print(f"🤖 Claude service initialized with model: {self.model}")
     
     async def analyze_screenshot(self, image_path: str) -> Tuple[str, str]:
         """Analyze a screenshot and extract OCR text and visual description with retry logic"""

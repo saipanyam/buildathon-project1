@@ -28,8 +28,8 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str = ""
     GITHUB_PERSONAL_ACCESS_TOKEN: Optional[str] = None
     
-    # Model Settings
-    MODEL_NAME: str = "claude-3-5-sonnet-20241022"
+    # Model Settings - Claude 3 Opus for superior visual analysis and extraction
+    MODEL_NAME: str = "claude-3-opus-20240229"
     
     # Application Settings
     APP_ENV: str = "development"
