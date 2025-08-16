@@ -61,7 +61,11 @@ PROCESSED_DIR = Path("processed")
 UPLOAD_DIR.mkdir(exist_ok=True)
 PROCESSED_DIR.mkdir(exist_ok=True)
 
-# Mount static files for frontend
+# Mount static files for frontend assets
+if Path("static/assets").exists():
+    app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+
+# Mount static files for other resources (icons, etc.)
 if Path("static").exists():
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -74,6 +78,22 @@ async def api_status():
         "environment": os.getenv("APP_ENV", "production"),
         "port": os.getenv("PORT", "unknown")
     }
+
+@app.get("/yantra-icon.svg")
+async def serve_icon():
+    """Serve the app icon"""
+    icon_path = Path("static/yantra-icon.svg")
+    if icon_path.exists():
+        return FileResponse(icon_path, media_type="image/svg+xml")
+    raise HTTPException(status_code=404, detail="Icon not found")
+
+@app.get("/vite.svg")
+async def serve_vite_icon():
+    """Serve the Vite icon"""
+    icon_path = Path("static/vite.svg")
+    if icon_path.exists():
+        return FileResponse(icon_path, media_type="image/svg+xml")
+    raise HTTPException(status_code=404, detail="Icon not found")
 
 @app.get("/")
 async def serve_frontend():
