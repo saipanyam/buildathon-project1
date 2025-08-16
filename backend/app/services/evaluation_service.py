@@ -146,12 +146,15 @@ class EvaluationService:
             score = 6
             reasoning = f"Moderate amount of text extracted ({word_count} words)"
             suggestions.append("Check for text in headers, footers, or sidebars that might be missed")
-        elif text_length < 300:
+        elif text_length < 500:
             score = 8
             reasoning = f"Good amount of text extracted ({word_count} words)"
+        elif text_length < 1000:
+            score = 9
+            reasoning = f"Very good amount of text extracted ({word_count} words)"
         else:
             score = 10
-            reasoning = f"Substantial text extracted ({word_count} words)"
+            reasoning = f"Excellent amount of text extracted ({word_count} words)"
         
         # Check for common UI text patterns
         ui_patterns = ['button', 'click', 'menu', 'submit', 'cancel', 'save', 'delete']
@@ -222,15 +225,31 @@ class EvaluationService:
                 score += 2
                 elements_found.append(category)
         
+        # Also give points for detailed descriptions regardless of keyword matching
+        description_length = len(visual_description.strip())
+        if description_length > 500:
+            score += 2  # Bonus for detailed descriptions
+        elif description_length > 200:
+            score += 1  # Small bonus for moderate descriptions
+            
         if not elements_found:
-            reasoning = "No specific visual elements identified"
-            suggestions.append("Enhance visual element detection in the description")
-            suggestions.append("Include more specific UI component identification")
-        elif len(elements_found) < 3:
-            reasoning = f"Limited visual elements described: {', '.join(elements_found)}"
+            if description_length > 200:
+                score = max(score, 4)  # Give some credit for detailed description
+                reasoning = "Detailed visual description provided, but specific UI elements not clearly identified"
+                suggestions.append("Try to identify specific UI components more explicitly")
+            else:
+                reasoning = "No specific visual elements identified"
+                suggestions.append("Enhance visual element detection in the description")
+                suggestions.append("Include more specific UI component identification")
+        elif len(elements_found) < 2:
+            reasoning = f"Some visual elements described: {', '.join(elements_found)}"
+            if description_length > 300:
+                reasoning += " with good detail"
             suggestions.append("Expand coverage of visual elements")
         else:
             reasoning = f"Good coverage of visual elements: {', '.join(elements_found)}"
+            if description_length > 400:
+                reasoning += " with excellent detail"
         
         return EvaluationResult(
             criteria="Visual Element Coverage",
@@ -351,13 +370,13 @@ class EvaluationService:
     
     def _get_quality_level(self, confidence_score: float) -> str:
         """Determine quality level based on confidence score (adjusted for Claude 3 Opus quality)"""
-        if confidence_score >= 80:
+        if confidence_score >= 70:
             return "Excellent"
-        elif confidence_score >= 65:
+        elif confidence_score >= 55:
             return "Good"
-        elif confidence_score >= 50:
+        elif confidence_score >= 40:
             return "Fair"
-        elif confidence_score >= 35:
+        elif confidence_score >= 25:
             return "Poor"
         else:
             return "Very Poor"

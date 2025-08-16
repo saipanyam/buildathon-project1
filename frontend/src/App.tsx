@@ -170,7 +170,7 @@ function AppContent() {
         {/* Search functionality removed - show only extraction results */}
 
         {/* Features - Only show if no results yet */}
-        {!hasUploadedFiles && (
+        {allResults.length === 0 && (
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Text Extraction Feature Card */}
             <div className="group relative">

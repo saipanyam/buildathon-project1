@@ -23,7 +23,22 @@ class SimpleSearchService:
     def search(self, query: str, top_k: int = 5) -> List[SearchResult]:
         """Simple text-based search"""
         if not query.strip():
-            return []
+            # Return all screenshots when no query provided
+            results = []
+            for screenshot in self.screenshots:
+                result = SearchResult(
+                    filename=screenshot.filename,
+                    file_hash=screenshot.file_hash,
+                    ocr_text=screenshot.ocr_text,
+                    visual_description=screenshot.visual_description,
+                    score=1.0,  # Give all results max score when no search
+                    processed_at=screenshot.processed_at,
+                    evaluation=screenshot.evaluation
+                )
+                results.append(result)
+            # Sort by processed time (newest first)
+            results.sort(key=lambda x: x.processed_at, reverse=True)
+            return results
         
         query_lower = query.lower().strip()
         results = []
@@ -38,7 +53,8 @@ class SimpleSearchService:
                     ocr_text=screenshot.ocr_text,
                     visual_description=screenshot.visual_description,
                     score=score,
-                    processed_at=screenshot.processed_at
+                    processed_at=screenshot.processed_at,
+                    evaluation=screenshot.evaluation
                 )
                 results.append(result)
         
