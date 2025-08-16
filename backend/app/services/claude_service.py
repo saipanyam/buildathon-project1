@@ -54,8 +54,14 @@ class ClaudeService:
             filename = Path(image_path).name
             return f"Text extracted from {filename}", f"Visual analysis of {filename} - Claude API temporarily unavailable"
         
-        with open(image_path, "rb") as f:
-            image_data = base64.b64encode(f.read()).decode()
+        try:
+            with open(image_path, "rb") as f:
+                image_content = f.read()
+                image_data = base64.b64encode(image_content).decode()
+                print(f"Image processing: path={image_path}, size={len(image_content)} bytes, base64_size={len(image_data)}")
+        except Exception as e:
+            print(f"Error reading image file {image_path}: {e}")
+            return "", f"Failed to read image file: {Path(image_path).name}"
         
         prompt = self.prompt_manager.get_current_prompt("ocr_and_visual")
 

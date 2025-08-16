@@ -169,8 +169,8 @@ function AppContent() {
 
         {/* Search functionality removed - show only extraction results */}
 
-        {/* Features - Only show if no results yet */}
-        {allResults.length === 0 && (
+        {/* Features - Only show if no results yet and not processing */}
+        {allResults.length === 0 && !isProcessing && (
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Text Extraction Feature Card */}
             <div className="group relative">
