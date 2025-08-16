@@ -176,6 +176,7 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
               const cardId = `${result.file_hash}-${actualIndex}`;
               const isFlipped = flippedCards.has(cardId);
               const imageUrl = getImageUrl(result.file_hash);
+              console.log(`Image URL for ${result.filename}: ${imageUrl}`);
 
               return (
                 <div key={cardId} className="flex-shrink-0 w-80 h-96">
@@ -199,6 +200,7 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
                             alt={result.filename}
                             className="w-full h-full object-cover"
                             onError={(e) => {
+                              console.error(`Failed to load image: ${imageUrl}`);
                               const target = e.target as HTMLImageElement;
                               target.style.display = 'none';
                               const fallback = target.nextElementSibling as HTMLElement;

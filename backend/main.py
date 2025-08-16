@@ -136,11 +136,14 @@ async def get_upload_file(file_hash: str):
     import os
     from fastapi.responses import FileResponse
     
+    print(f"Image request for hash: {file_hash}")
+    
     # Check for different extensions
     possible_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp']
     
     for ext in possible_extensions:
         file_path = UPLOAD_DIR / f"{file_hash}{ext}"
+        print(f"Checking path: {file_path}, exists: {file_path.exists()}")
         if file_path.exists():
             # Map extensions to proper MIME types
             mime_mapping = {
@@ -151,12 +154,18 @@ async def get_upload_file(file_hash: str):
                 '.webp': 'image/webp',
                 '.bmp': 'image/bmp'
             }
+            print(f"Serving image: {file_path}, media_type: {mime_mapping.get(ext, 'image/png')}")
             return FileResponse(
                 path=str(file_path),
                 media_type=mime_mapping.get(ext, 'image/png'),
-                filename=f"{file_hash}{ext}"
+                filename=f"{file_hash}{ext}",
+                headers={
+                    "Cache-Control": "public, max-age=3600",
+                    "Access-Control-Allow-Origin": "*"
+                }
             )
     
+    print(f"File not found for hash: {file_hash}")
     raise HTTPException(status_code=404, detail=f"File not found for hash: {file_hash}")
 
 @app.post("/upload-screenshots")
