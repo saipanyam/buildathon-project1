@@ -21,7 +21,8 @@
       "Bash(npm uninstall:*)",
       "Bash(npx tailwindcss init:*)",
       "Bash(cat:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": [],

@@ -211,6 +211,30 @@
           "filename": "Buildathon-Visual-Search/Financial-Rules.jpg",
           "file_hash": "6412f718445320eeabdbcb25785dd4ae"
         }
+      },
+      {
+        "score": 0.26,
+        "timestamp": "2025-08-16T14:14:09.061874",
+        "metadata": {
+          "filename": "Ensuring Quality.png",
+          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+        }
+      },
+      {
+        "score": 0.26,
+        "timestamp": "2025-08-16T14:16:16.904097",
+        "metadata": {
+          "filename": "Ensuring Quality.png",
+          "file_hash": "2f32fbb511f8004cc10a3b6c10816463"
+        }
+      },
+      {
+        "score": 0.67,
+        "timestamp": "2025-08-16T14:22:16.192715",
+        "metadata": {
+          "filename": "WhyUseCausalAI.png",
+          "file_hash": "7ce803013ba56511583fe458a4951c4d"
+        }
       }
     ]
   }

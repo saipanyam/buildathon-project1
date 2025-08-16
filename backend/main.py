@@ -334,6 +334,17 @@ async def get_prompt_performance():
     prompt_manager = app.state.prompt_manager
     return prompt_manager.get_prompt_performance("ocr_and_visual")
 
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    from app.config import settings
+    
+    # Use Heroku's PORT if available, otherwise use configured port
+    port = settings.PORT or settings.APP_PORT
+    
+    uvicorn.run(
+        app, 
+        host=settings.APP_HOST, 
+        port=port,
+        reload=settings.APP_DEBUG
+    )

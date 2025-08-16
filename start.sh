@@ -1,6 +1,19 @@
 #!/bin/bash
 
-echo "Starting Visual Memory Search Application..."
+echo "Starting Visual Memory Search Yantra..."
+
+# Check for environment file
+if [ ! -f "vms-yantra.env" ]; then
+    echo "⚠️  Warning: vms-yantra.env file not found!"
+    echo "   Creating from example file..."
+    if [ -f "vms-yantra.env.example" ]; then
+        cp vms-yantra.env.example vms-yantra.env
+        echo "   ✅ Created vms-yantra.env from example"
+        echo "   ⚠️  Please edit vms-yantra.env and add your ANTHROPIC_API_KEY"
+        echo ""
+        read -p "Press Enter to continue (the app will run but won't work without API key)..."
+    fi
+fi
 
 # Start backend
 echo "Starting backend server..."

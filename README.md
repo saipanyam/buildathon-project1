@@ -1,19 +1,51 @@
-# Visual Memory Search - AI Screenshot Explorer
+# Visual Memory Search Yantra - AI Screenshot Explorer
 
-## 🚀 **Application Status - Ready for Testing!**
+## 🚀 **Quick Start**
 
-### ✅ **Backend Server** 
-- **URL**: http://localhost:8000
-- **Status**: Active and running
-- **API Key**: Configured ✅
-- **Features**: All endpoints operational
-- **Documentation**: http://localhost:8000/docs
+### 1. **Setup Environment Variables**
+```bash
+# Copy the example env file
+cp vms-yantra.env.example vms-yantra.env
 
-### ✅ **Frontend Server**
-- **URL**: http://localhost:5173  
-- **Status**: Active and running
-- **UI**: Modern interface ready
-- **Features**: All components loaded
+# Edit vms-yantra.env and add your API keys:
+# - ANTHROPIC_API_KEY (required)
+# - GITHUB_PERSONAL_ACCESS_TOKEN (optional)
+```
+
+### 2. **Run the Application**
+```bash
+# Start both backend and frontend
+./start.sh
+
+# Or start individually:
+# Backend: cd backend && uvicorn main:app --reload
+# Frontend: cd frontend && npm run dev
+```
+
+### 3. **Access the Application**
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **API Documentation**: http://localhost:8000/docs
+- **Test Dashboard**: http://localhost:3001
+
+## 🌐 **Deployment**
+
+### Deploy to Heroku
+```bash
+# Quick deployment with our script
+./deploy-heroku.sh
+
+# Or manually with Heroku CLI
+heroku create your-app-name
+heroku config:set ANTHROPIC_API_KEY="your-api-key"
+git push heroku main
+```
+
+**See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide including:**
+- Multiple deployment methods
+- Environment variable management
+- Security best practices
+- Troubleshooting guide
 
 ## 🎯 **Project Overview**
 
