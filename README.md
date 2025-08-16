@@ -3,7 +3,7 @@ The Buildathon is a multi-stage competition that challenges participants to rapi
 
   ## Project 1: Visual Memory Search
 
-  *Description*: Search your screenshot history using natural language queries for both text content AND visual elements.
+  **Description**: Search your screenshot history using natural language queries for both text content AND visual elements.
 
   Requirements:
   • Accept folder of screenshots
