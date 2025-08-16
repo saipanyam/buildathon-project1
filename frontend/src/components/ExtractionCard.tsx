@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { SearchResult } from '../types';
 import { FileText, BarChart3, ChevronDown, ChevronUp, Eye, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
-import { getImageUrl } from '../utils/api';
+import { getImageUrl, safePercentage, formatPercentage } from '../utils/api';
 
 interface ExtractionCardProps {
   result: SearchResult;
@@ -43,6 +43,7 @@ const ExtractionCard: React.FC<ExtractionCardProps> = ({ result, index }) => {
 
   // Create a placeholder image URL
   const imageUrl = getImageUrl(result.file_hash);
+  console.log(`ExtractionCard image URL for ${result.filename}: ${imageUrl}`);
 
   return (
     <div className="bg-gray-900/80 backdrop-blur-sm rounded-lg border border-gray-700 overflow-hidden">
@@ -71,7 +72,10 @@ const ExtractionCard: React.FC<ExtractionCardProps> = ({ result, index }) => {
               src={imageUrl}
               alt={result.filename}
               className="w-full h-full object-contain"
-              onError={() => setImageError(true)}
+              onError={(e) => {
+                console.error(`Failed to load image in ExtractionCard: ${imageUrl}`);
+                setImageError(true);
+              }}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -116,12 +120,12 @@ const ExtractionCard: React.FC<ExtractionCardProps> = ({ result, index }) => {
             <div className="space-y-1">
               <div className="flex justify-between text-xs">
                 <span className="text-gray-400">Overall Score</span>
-                <span className="text-white font-medium">{(result.confidence_score * 100).toFixed(1)}%</span>
+                <span className="text-white font-medium">{formatPercentage(result.confidence_score * 100)}</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2">
                 <div 
                   className="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full transition-all"
-                  style={{ width: `${result.confidence_score * 100}%` }}
+                  style={{ width: `${safePercentage(result.confidence_score * 100)}%` }}
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
@@ -161,13 +165,13 @@ const ExtractionCard: React.FC<ExtractionCardProps> = ({ result, index }) => {
                         {criteria.score}/{criteria.max_score}
                       </span>
                     </div>
-                    <span className="text-sm font-bold text-white">{criteria.percentage}%</span>
+                    <span className="text-sm font-bold text-white">{formatPercentage(criteria.percentage)}</span>
                   </div>
                   
                   <div className="w-full bg-gray-700 rounded-full h-1.5 mb-2">
                     <div 
                       className="bg-gradient-to-r from-red-500 to-red-600 h-1.5 rounded-full transition-all"
-                      style={{ width: `${criteria.percentage}%` }}
+                      style={{ width: `${safePercentage(criteria.percentage)}%` }}
                     />
                   </div>
                   

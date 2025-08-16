@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { SearchResult } from '../types';
 import { FileText, BarChart3, ChevronDown, ChevronUp, Eye, AlertTriangle, CheckCircle, XCircle, ImageIcon, Expand } from 'lucide-react';
 import ImagePopup from './ImagePopup';
-import { getImageUrl } from '../utils/api';
+import { getImageUrl, safePercentage, formatPercentage } from '../utils/api';
 
 interface ImprovedExtractionCardProps {
   result: SearchResult;
@@ -46,6 +46,7 @@ const ImprovedExtractionCard: React.FC<ImprovedExtractionCardProps> = ({ result,
 
   // Create image URL using the new endpoint
   const imageUrl = getImageUrl(result.file_hash);
+  console.log(`ImprovedExtractionCard image URL for ${result.filename}: ${imageUrl}`);
 
   return (
     <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl border border-gray-700 overflow-hidden hover:border-gray-600 transition-all duration-300 shadow-xl">
@@ -106,7 +107,10 @@ const ImprovedExtractionCard: React.FC<ImprovedExtractionCardProps> = ({ result,
                 src={imageUrl}
                 alt={result.filename}
                 className="w-full h-full object-contain cursor-pointer"
-                onError={() => setImageError(true)}
+                onError={(e) => {
+                console.error(`Failed to load image: ${imageUrl}`);
+                setImageError(true);
+              }}
                 onClick={() => setIsImagePopupOpen(true)}
               />
               {/* Expand overlay */}
@@ -129,7 +133,7 @@ const ImprovedExtractionCard: React.FC<ImprovedExtractionCardProps> = ({ result,
           {/* Image Overlay with Quality Score */}
           <div className="absolute top-4 right-4">
             <div className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${getConfidenceColor(result.confidence_score)}`}>
-              {(result.confidence_score * 100).toFixed(0)}%
+              {formatPercentage(result.confidence_score * 100)}
             </div>
           </div>
         </div>
@@ -168,7 +172,7 @@ const ImprovedExtractionCard: React.FC<ImprovedExtractionCardProps> = ({ result,
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
                   <div className="text-2xl font-bold text-white">
-                    {(result.confidence_score * 100).toFixed(0)}%
+                    {formatPercentage(result.confidence_score * 100)}
                   </div>
                   <div className="text-xs text-gray-400">Quality Score</div>
                 </div>
@@ -208,12 +212,12 @@ const ImprovedExtractionCard: React.FC<ImprovedExtractionCardProps> = ({ result,
                       <div className="mb-2">
                         <div className="flex justify-between text-xs text-gray-400 mb-1">
                           <span>Score</span>
-                          <span>{criteria.percentage}%</span>
+                          <span>{formatPercentage(criteria.percentage)}</span>
                         </div>
                         <div className="w-full bg-gray-700 rounded-full h-1.5">
                           <div 
                             className="bg-gradient-to-r from-red-500 to-red-600 h-1.5 rounded-full transition-all"
-                            style={{ width: `${criteria.percentage}%` }}
+                            style={{ width: `${safePercentage(criteria.percentage)}%` }}
                           />
                         </div>
                       </div>

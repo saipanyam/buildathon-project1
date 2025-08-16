@@ -176,6 +176,7 @@ function AppContent() {
         {/* Search functionality removed - show only extraction results */}
 
         {/* Features - Show until we have actual extraction results */}
+        {console.log('Feature boxes debug:', { showFeatureBoxes, allResultsLength: allResults.length, isProcessing })}
         {showFeatureBoxes && (
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Text Extraction Feature Card */}
