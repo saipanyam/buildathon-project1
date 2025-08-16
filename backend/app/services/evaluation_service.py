@@ -99,7 +99,8 @@ class EvaluationService:
         print(f"Evaluation debug: total_score={total_score}, max_total_score={max_total_score}, confidence_score={confidence_score}")
         for i, (eval_result, criteria) in enumerate(zip(evaluations, self.rubric)):
             weighted_score = (eval_result.score / eval_result.max_score) * criteria.weight * 100 if eval_result.max_score > 0 else 0
-            print(f"  {criteria.name}: {eval_result.score}/{eval_result.max_score} = {weighted_score:.1f} (weight: {criteria.weight})")
+            print(f"  {criteria.name}: {eval_result.score}/{eval_result.max_score} = {weighted_score:.1f}% (weight: {criteria.weight*100}%)")
+            print(f"    Reasoning: {eval_result.reasoning}")
         
         # Generate overall suggestions
         all_suggestions = []

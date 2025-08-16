@@ -250,6 +250,7 @@ async def process_screenshots(files: List[dict]):
             
             # Evaluate the extraction quality
             print("Starting evaluation...")
+            print(f"Debug: Evaluating with OCR='{ocr_text[:100]}...', Visual='{visual_description[:100]}...'")
             evaluation = evaluation_service.evaluate_extraction(ocr_text, visual_description)
             print(f"Evaluation completed: {evaluation.get('quality_level', 'unknown')}")
             
