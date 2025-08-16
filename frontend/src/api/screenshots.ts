@@ -1,10 +1,8 @@
 import axios from 'axios';
 import type { SearchResult, UploadResponse } from '../types';
+import { getApiBaseUrl } from '../utils/api';
 
-// Use relative URLs in production, localhost in development
-const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:8000' 
-  : window.location.origin;
+const API_BASE_URL = getApiBaseUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,

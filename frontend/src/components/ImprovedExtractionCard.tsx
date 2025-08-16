@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { SearchResult } from '../types';
 import { FileText, BarChart3, ChevronDown, ChevronUp, Eye, AlertTriangle, CheckCircle, XCircle, ImageIcon, Expand } from 'lucide-react';
 import ImagePopup from './ImagePopup';
+import { getImageUrl } from '../utils/api';
 
 interface ImprovedExtractionCardProps {
   result: SearchResult;
@@ -44,7 +45,7 @@ const ImprovedExtractionCard: React.FC<ImprovedExtractionCardProps> = ({ result,
   };
 
   // Create image URL using the new endpoint
-  const imageUrl = `http://localhost:8000/uploads/${result.file_hash}`;
+  const imageUrl = getImageUrl(result.file_hash);
 
   return (
     <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl border border-gray-700 overflow-hidden hover:border-gray-600 transition-all duration-300 shadow-xl">

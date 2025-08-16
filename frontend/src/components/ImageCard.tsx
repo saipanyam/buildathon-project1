@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { SearchResult } from '../types';
 import { FileText, Image, Layers, TrendingUp, BarChart3, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+import { getImageUrl } from '../utils/api';
 
 interface ImageCardProps {
   result: SearchResult;
@@ -76,7 +77,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ result, index }) => {
   };
 
   // Create a placeholder image URL for demonstration
-  const imageUrl = `http://localhost:8000/uploads/${result.file_hash}.png`;
+  const imageUrl = getImageUrl(result.file_hash);
 
   return (
     <div className="relative group">

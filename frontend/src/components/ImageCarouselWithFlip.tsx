@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Eye, FileText, BarChart3, ChevronDown, ChevronUp, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import type { SearchResult } from '../types';
+import { getImageUrl } from '../utils/api';
 
 interface ImageCarouselWithFlipProps {
   results: SearchResult[];
@@ -174,7 +175,7 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
                 : currentIndex + index; // Use current position + offset for larger sets
               const cardId = `${result.file_hash}-${actualIndex}`;
               const isFlipped = flippedCards.has(cardId);
-              const imageUrl = `http://localhost:8000/uploads/${result.file_hash}`;
+              const imageUrl = getImageUrl(result.file_hash);
 
               return (
                 <div key={cardId} className="flex-shrink-0 w-80 h-96">

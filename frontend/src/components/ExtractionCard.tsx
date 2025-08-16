@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { SearchResult } from '../types';
 import { FileText, BarChart3, ChevronDown, ChevronUp, Eye, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { getImageUrl } from '../utils/api';
 
 interface ExtractionCardProps {
   result: SearchResult;
@@ -41,7 +42,7 @@ const ExtractionCard: React.FC<ExtractionCardProps> = ({ result, index }) => {
   };
 
   // Create a placeholder image URL
-  const imageUrl = `http://localhost:8000/uploads/${result.file_hash}.png`;
+  const imageUrl = getImageUrl(result.file_hash);
 
   return (
     <div className="bg-gray-900/80 backdrop-blur-sm rounded-lg border border-gray-700 overflow-hidden">
