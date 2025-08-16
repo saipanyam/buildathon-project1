@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if [ -n \"$GITHUB_PERSONAL_ACCESS_TOKEN\" ])",
+      "Bash(then echo \"Token is set\")",
+      "Bash(else echo \"Token is NOT set\")",
+      "Bash(fi)",
+      "Bash(source:*)",
+      "Bash(then echo \"Token is set after sourcing bash_profile\")",
+      "Bash(else echo \"Token is NOT set after sourcing\")",
+      "Bash(gh auth:*)",
+      "Bash(git push:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(uvicorn:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(cat:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/saipanyam/.config",
+      "/Users/saipanyam/Documents/buildathon"
+    ]
+  }
+}
