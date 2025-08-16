@@ -17,8 +17,14 @@ class ScreenshotMetadata(BaseModel):
 class SearchResult(BaseModel):
     filename: str
     file_hash: str
-    confidence_score: float
+    score: float  # Changed from confidence_score for compatibility
     ocr_text: str
     visual_description: str
-    match_type: str  # "text", "visual", or "combined"
+    processed_at: datetime
+    match_type: Optional[str] = "combined"  # "text", "visual", or "combined" 
     evaluation: Optional[Dict[str, Any]] = None
+    
+    # For backward compatibility
+    @property
+    def confidence_score(self):
+        return self.score

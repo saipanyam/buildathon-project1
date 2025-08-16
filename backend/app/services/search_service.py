@@ -65,9 +65,10 @@ class SearchService:
                 results.append(SearchResult(
                     filename=screenshot.filename,
                     file_hash=screenshot.file_hash,
-                    confidence_score=float(combined_scores[idx]),
+                    score=float(combined_scores[idx]),
                     ocr_text=screenshot.ocr_text,  # Return full text
                     visual_description=screenshot.visual_description,  # Return full description
+                    processed_at=screenshot.processed_at,
                     match_type=match_type,
                     evaluation=screenshot.evaluation
                 ))

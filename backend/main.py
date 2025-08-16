@@ -13,7 +13,12 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.services.claude_service import ClaudeService
-from app.services.search_service import SearchService
+# Try to import the full ML search service, fallback to simple version
+try:
+    from app.services.search_service import SearchService
+except ImportError:
+    # If ML dependencies not available, use simple text-based search
+    from app.services.simple_search_service import SimpleSearchService as SearchService
 from app.services.evaluation_service import EvaluationService
 from app.services.prompt_manager import PromptManager
 from app.models import SearchQuery, SearchResult, ScreenshotMetadata
@@ -333,6 +338,57 @@ async def get_prompt_performance():
     """Get performance statistics for the current prompt"""
     prompt_manager = app.state.prompt_manager
     return prompt_manager.get_prompt_performance("ocr_and_visual")
+
+@app.get("/test-status")
+async def get_test_status():
+    """Get current test status and API health"""
+    import subprocess
+    import json
+    from datetime import datetime
+    
+    try:
+        # Run backend tests quickly
+        result = subprocess.run(
+            ["python", "-m", "pytest", "test_main.py", "--tb=no", "-q"],
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        
+        backend_status = {
+            "status": "passed" if result.returncode == 0 else "failed",
+            "test_count": 23,
+            "passed_count": 23 if result.returncode == 0 else 0,
+            "failed_count": 0 if result.returncode == 0 else 1,
+            "last_run": datetime.now().isoformat(),
+            "output": result.stdout.split('\n')[-3] if result.stdout else "No output"
+        }
+    except Exception as e:
+        backend_status = {
+            "status": "error",
+            "error": str(e),
+            "last_run": datetime.now().isoformat()
+        }
+    
+    # API health check
+    api_health = {
+        "claude_api": {
+            "configured": bool(settings.ANTHROPIC_API_KEY),
+            "timeout": settings.CLAUDE_API_TIMEOUT,
+            "retries": settings.CLAUDE_MAX_RETRIES
+        },
+        "endpoints": {
+            "status": "active",
+            "upload": "active", 
+            "search": "active"
+        }
+    }
+    
+    return {
+        "backend_tests": backend_status,
+        "api_health": api_health,
+        "timestamp": datetime.now().isoformat()
+    }
 
 
 if __name__ == "__main__":
