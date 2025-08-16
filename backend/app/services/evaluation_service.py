@@ -94,6 +94,12 @@ class EvaluationService:
         # Ensure confidence_score is not NaN
         if confidence_score != confidence_score:  # NaN check
             confidence_score = 0
+            
+        # Debug evaluation scoring
+        print(f"Evaluation debug: total_score={total_score}, max_total_score={max_total_score}, confidence_score={confidence_score}")
+        for i, (eval_result, criteria) in enumerate(zip(evaluations, self.rubric)):
+            weighted_score = (eval_result.score / eval_result.max_score) * criteria.weight * 100 if eval_result.max_score > 0 else 0
+            print(f"  {criteria.name}: {eval_result.score}/{eval_result.max_score} = {weighted_score:.1f} (weight: {criteria.weight})")
         
         # Generate overall suggestions
         all_suggestions = []
@@ -113,7 +119,7 @@ class EvaluationService:
                     "criteria": eval.criteria,
                     "score": eval.score,
                     "max_score": eval.max_score,
-                    "percentage": round((eval.score / eval.max_score) * 100, 1) if eval.max_score > 0 and eval.score == eval.score else 0,
+                    "percentage": round((eval.score / eval.max_score) * 100, 1) if eval.max_score > 0 and not (eval.score != eval.score) and eval.score is not None else 0,
                     "reasoning": eval.reasoning,
                     "suggestions": eval.suggestions
                 }
@@ -168,6 +174,9 @@ class EvaluationService:
             score = min(10, score + 1)
             reasoning += ". Good coverage of UI text elements"
         
+        # Ensure score is valid
+        score = max(0, min(max_score, score if score == score and score is not None else 0))
+        
         return EvaluationResult(
             criteria="Text Completeness",
             score=score,
@@ -202,9 +211,12 @@ class EvaluationService:
             reasoning = "Found unusually long words suggesting OCR errors"
             suggestions.append("Review word segmentation in the OCR process")
         
+        # Ensure score is valid
+        score = max(0, min(max_score, score if score == score and score is not None else 0))
+        
         return EvaluationResult(
             criteria="Text Accuracy",
-            score=max(0, score),
+            score=score,
             max_score=max_score,
             reasoning=reasoning,
             suggestions=suggestions
@@ -256,9 +268,12 @@ class EvaluationService:
             if description_length > 400:
                 reasoning += " with excellent detail"
         
+        # Ensure score is valid
+        score = max(0, min(max_score, score if score == score and score is not None else 0))
+        
         return EvaluationResult(
             criteria="Visual Element Coverage",
-            score=min(10, score),
+            score=score,
             max_score=max_score,
             reasoning=reasoning,
             suggestions=suggestions
@@ -290,6 +305,9 @@ class EvaluationService:
         if any(term in visual_description.lower() for term in ['grid', 'row', 'column', 'panel']):
             score = min(10, score + 2)
             reasoning += ". Includes structural layout information"
+        
+        # Ensure score is valid
+        score = max(0, min(max_score, score if score == score and score is not None else 0))
         
         return EvaluationResult(
             criteria="Layout Description",
@@ -326,6 +344,9 @@ class EvaluationService:
             reasoning = "Some color and style details included"
         else:
             reasoning = "Good color and style recognition"
+        
+        # Ensure score is valid
+        score = max(0, min(max_score, score if score == score and score is not None else 0))
         
         return EvaluationResult(
             criteria="Color and Style Recognition",
@@ -364,6 +385,9 @@ class EvaluationService:
             score = min(10, score + 1)
         if re.search(r'\b\d+\b', combined_text):  # Numbers/IDs
             score = min(10, score + 1)
+        
+        # Ensure score is valid
+        score = max(0, min(max_score, score if score == score and score is not None else 0))
         
         return EvaluationResult(
             criteria="Searchability",
