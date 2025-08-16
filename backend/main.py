@@ -61,17 +61,34 @@ PROCESSED_DIR = Path("processed")
 UPLOAD_DIR.mkdir(exist_ok=True)
 PROCESSED_DIR.mkdir(exist_ok=True)
 
-# Mount static files (disabled in favor of custom endpoint)
-# app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+# Mount static files for frontend
+if Path("static").exists():
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.get("/")
-async def root():
+@app.get("/api/status")
+async def api_status():
+    """API status endpoint - moved from root to avoid conflict with frontend"""
     return {
         "message": "Visual Memory Search API", 
         "status": "active",
         "environment": os.getenv("APP_ENV", "production"),
         "port": os.getenv("PORT", "unknown")
     }
+
+@app.get("/")
+async def serve_frontend():
+    """Serve the React frontend"""
+    frontend_path = Path("static/index.html")
+    if frontend_path.exists():
+        return FileResponse(frontend_path, media_type="text/html")
+    else:
+        # Fallback to API response if frontend not available
+        return {
+            "message": "Visual Memory Search API", 
+            "status": "active",
+            "environment": os.getenv("APP_ENV", "production"),
+            "port": os.getenv("PORT", "unknown")
+        }
 
 @app.get("/uploads/{file_hash}")
 async def get_upload_file(file_hash: str):
@@ -447,6 +464,21 @@ async def refresh_test_status():
     _test_status_cache["data"] = None
     _test_status_cache["last_update"] = None
     return await get_test_status()
+
+# Catch-all route for React Router (SPA)
+@app.get("/{path:path}")
+async def serve_spa(path: str):
+    """Catch-all route to serve React SPA for any unmatched routes"""
+    # For API routes, return 404
+    if path.startswith("api/"):
+        raise HTTPException(status_code=404, detail="API endpoint not found")
+    
+    # For all other routes, serve the React app
+    frontend_path = Path("static/index.html")
+    if frontend_path.exists():
+        return FileResponse(frontend_path, media_type="text/html")
+    else:
+        raise HTTPException(status_code=404, detail="Frontend not available")
 
 
 if __name__ == "__main__":

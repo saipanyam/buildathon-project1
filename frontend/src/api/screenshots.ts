@@ -1,7 +1,10 @@
 import axios from 'axios';
 import type { SearchResult, UploadResponse } from '../types';
 
-const API_BASE_URL = 'http://localhost:8000';
+// Use relative URLs in production, localhost in development
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:8000' 
+  : window.location.origin;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -42,6 +45,6 @@ export const processFolder = async (folderPath: string): Promise<UploadResponse>
 };
 
 export const getStatus = async () => {
-  const response = await api.get('/status');
+  const response = await api.get('/api/status');
   return response.data;
 };
