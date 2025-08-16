@@ -364,12 +364,30 @@ async def get_prompt_performance():
     prompt_manager = app.state.prompt_manager
     return prompt_manager.get_prompt_performance("ocr_and_visual")
 
+# Cache for test status to avoid running tests repeatedly
+_test_status_cache = {
+    "data": None,
+    "last_update": None,
+    "cache_duration": 300  # 5 minutes
+}
+
 @app.get("/test-status")
 async def get_test_status():
     """Get current test status and API health"""
     import subprocess
     import json
-    from datetime import datetime
+    from datetime import datetime, timedelta
+    
+    # Check cache first
+    now = datetime.now()
+    if (_test_status_cache["data"] is not None and 
+        _test_status_cache["last_update"] is not None and 
+        now - _test_status_cache["last_update"] < timedelta(seconds=_test_status_cache["cache_duration"])):
+        # Return cached result with updated timestamp
+        cached_data = _test_status_cache["data"].copy()
+        cached_data["timestamp"] = now.isoformat()
+        cached_data["cached"] = True
+        return cached_data
     
     try:
         # Run backend tests quickly
@@ -409,23 +427,42 @@ async def get_test_status():
         }
     }
     
-    return {
+    response_data = {
         "backend_tests": backend_status,
         "api_health": api_health,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
+        "cached": False
     }
+    
+    # Cache the result
+    _test_status_cache["data"] = response_data.copy()
+    _test_status_cache["last_update"] = now
+    
+    return response_data
+
+@app.post("/test-status/refresh")
+async def refresh_test_status():
+    """Force refresh of test status cache"""
+    global _test_status_cache
+    _test_status_cache["data"] = None
+    _test_status_cache["last_update"] = None
+    return await get_test_status()
 
 
 if __name__ == "__main__":
     import uvicorn
     from app.config import settings
+    import os
     
     # Use Heroku's PORT if available, otherwise use configured port
-    port = settings.PORT or settings.APP_PORT
+    port = int(os.environ.get("PORT", settings.APP_PORT))
+    host = "0.0.0.0"  # Heroku requires 0.0.0.0
     
+    # For Heroku, use string import to avoid reload issues
     uvicorn.run(
-        app, 
-        host=settings.APP_HOST, 
+        "main:app",  # Use import string instead of app object
+        host=host, 
         port=port,
-        reload=False  # Disable reload in production
+        reload=False,  # Disable reload in production
+        workers=1  # Single worker for Heroku free tier
     )

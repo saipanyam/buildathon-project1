@@ -7,9 +7,10 @@ pydantic==2.9.2
 pydantic-settings==2.6.0
 python-dotenv==1.0.1
 aiofiles==24.1.0
+numpy==1.24.3
 # Minimal dependencies for Heroku deployment
 # Removing ML dependencies that are too large:
 # - sentence-transformers (2GB+)
 # - torch/torchvision (1GB+) 
 # - scikit-learn (large)
-# - numpy (keeping minimal version if needed)
+# Added lightweight numpy for basic operations

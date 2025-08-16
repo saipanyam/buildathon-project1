@@ -79,8 +79,12 @@ function App() {
     // Get real test status from backend
     try {
       const response = await fetch('http://localhost:8000/test-status');
-      const data = await response.json();
       
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
       const backendStatus = data.backend_tests;
       const results: TestResult[] = [];
       
@@ -113,18 +117,20 @@ function App() {
       
       // Generate results based on actual test status
       testNames.forEach((testName, index) => {
+        const isPassed = backendStatus.status === 'passed';
         results.push({
           id: `backend-${index + 1}`,
           name: testName,
           suite: 'backend',
-          status: backendStatus.status === 'passed' ? 'passed' : (index === 15 ? 'failed' : 'passed'),
+          status: isPassed ? 'passed' : 'failed',
           duration: Math.random() * 2 + 0.1,
           file: 'test_main.py',
           description: `Test ${testName.replace(/_/g, ' ')}`,
-          error: backendStatus.status === 'failed' && index === 15 ? backendStatus.error : undefined
+          error: !isPassed ? (backendStatus.error || 'Test failed') : undefined
         });
       });
       
+      console.log(`Backend tests loaded: ${results.length} tests, ${backendStatus.status} status`);
       return results;
       
     } catch (error) {
@@ -138,7 +144,7 @@ function App() {
         duration: 0,
         file: 'test_main.py',
         description: 'Test backend connection',
-        error: 'Failed to connect to backend API'
+        error: `Failed to connect to backend API: ${error.message}`
       }];
     }
   };
