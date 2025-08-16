@@ -67,6 +67,10 @@ class Settings(BaseSettings):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
+        # Handle Heroku PORT environment variable
+        if not self.PORT and os.environ.get('PORT'):
+            self.PORT = int(os.environ.get('PORT'))
+        
         # Fallback to settings.local.json for backwards compatibility
         if not self.ANTHROPIC_API_KEY:
             settings_path = Path("settings.local.json")
@@ -83,9 +87,9 @@ class Settings(BaseSettings):
                 except Exception as e:
                     print(f"Warning: Could not load settings from {settings_path}: {e}")
         
-        # Validate required settings
+        # Validate required settings (but allow empty API key for basic startup)
         if not self.ANTHROPIC_API_KEY or self.ANTHROPIC_API_KEY == "your_anthropic_api_key_here":
             print("⚠️  Warning: ANTHROPIC_API_KEY not configured!")
-            print("   Please set your API key in vms-yantra.env file")
+            print("   Some features may not work without a valid API key")
 
 settings = Settings()

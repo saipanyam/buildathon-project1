@@ -16,8 +16,10 @@ from app.services.claude_service import ClaudeService
 # Try to import the full ML search service, fallback to simple version
 try:
     from app.services.search_service import SearchService
-except ImportError:
-    # If ML dependencies not available, use simple text-based search
+    print("✅ Using full ML-powered search service")
+except ImportError as e:
+    print(f"⚠️  ML dependencies not available: {e}")
+    print("✅ Using lightweight text-based search service")
     from app.services.simple_search_service import SimpleSearchService as SearchService
 from app.services.evaluation_service import EvaluationService
 from app.services.prompt_manager import PromptManager
@@ -25,10 +27,18 @@ from app.models import SearchQuery, SearchResult, ScreenshotMetadata
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.claude_service = ClaudeService(api_key=settings.ANTHROPIC_API_KEY)
-    app.state.search_service = SearchService()
-    app.state.evaluation_service = EvaluationService()
-    app.state.prompt_manager = PromptManager()
+    try:
+        app.state.claude_service = ClaudeService(api_key=settings.ANTHROPIC_API_KEY)
+        app.state.search_service = SearchService()
+        app.state.evaluation_service = EvaluationService()
+        app.state.prompt_manager = PromptManager()
+    except Exception as e:
+        print(f"Warning: Failed to initialize some services: {e}")
+        # Initialize fallback services
+        app.state.claude_service = None
+        app.state.search_service = SearchService() if 'SearchService' in globals() else None
+        app.state.evaluation_service = EvaluationService()
+        app.state.prompt_manager = PromptManager()
     yield
     
 app = FastAPI(
@@ -56,7 +66,12 @@ PROCESSED_DIR.mkdir(exist_ok=True)
 
 @app.get("/")
 async def root():
-    return {"message": "Visual Memory Search API", "status": "active"}
+    return {
+        "message": "Visual Memory Search API", 
+        "status": "active",
+        "environment": os.getenv("APP_ENV", "production"),
+        "port": os.getenv("PORT", "unknown")
+    }
 
 @app.get("/uploads/{file_hash}")
 async def get_upload_file(file_hash: str):
@@ -207,18 +222,28 @@ async def search_screenshots(query: SearchQuery):
 @app.get("/status")
 async def get_status():
     """Get API status and statistics"""
-    upload_count = len(list(UPLOAD_DIR.glob("*.png"))) + len(list(UPLOAD_DIR.glob("*.jpg"))) + len(list(UPLOAD_DIR.glob("*.jpeg")))
-    processed_count = len(list(PROCESSED_DIR.glob("*.json")))
-    search_service = app.state.search_service
-    
-    return {
-        "status": "active",
-        "uploaded_files": upload_count,
-        "processed_files": processed_count,
-        "processing_rate": f"{processed_count}/{upload_count}" if upload_count > 0 else "0/0",
-        "indexed_screenshots": search_service.get_indexed_count(),
-        "api_key_configured": bool(settings.ANTHROPIC_API_KEY)
-    }
+    try:
+        upload_count = len(list(UPLOAD_DIR.glob("*.png"))) + len(list(UPLOAD_DIR.glob("*.jpg"))) + len(list(UPLOAD_DIR.glob("*.jpeg")))
+        processed_count = len(list(PROCESSED_DIR.glob("*.json")))
+        search_service = app.state.search_service
+        indexed_count = search_service.get_indexed_count() if search_service else 0
+        
+        return {
+            "status": "active",
+            "uploaded_files": upload_count,
+            "processed_files": processed_count,
+            "processing_rate": f"{processed_count}/{upload_count}" if upload_count > 0 else "0/0",
+            "indexed_screenshots": indexed_count,
+            "api_key_configured": bool(settings.ANTHROPIC_API_KEY),
+            "search_service": "available" if search_service else "unavailable"
+        }
+    except Exception as e:
+        return {
+            "status": "active",
+            "message": "Basic health check OK",
+            "error": str(e),
+            "api_key_configured": bool(settings.ANTHROPIC_API_KEY)
+        }
 
 def clear_previous_session():
     """Clear all previous uploads and processed files"""
@@ -402,5 +427,5 @@ if __name__ == "__main__":
         app, 
         host=settings.APP_HOST, 
         port=port,
-        reload=settings.APP_DEBUG
+        reload=False  # Disable reload in production
     )

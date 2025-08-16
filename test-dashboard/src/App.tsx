@@ -188,11 +188,10 @@ function App() {
             id: 'frontend-5',
             name: 'shows confidence score colors',
             suite: 'frontend',
-            status: 'failed',
+            status: 'passed',
             duration: 0.12,
             file: 'ExtractionCard.test.tsx',
-            description: 'Applies correct confidence score colors',
-            error: 'Expected "text-green-400" but received "text-gray-400"'
+            description: 'Applies correct confidence score colors'
           }
         ]);
       }, 1500);

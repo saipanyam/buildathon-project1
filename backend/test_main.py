@@ -15,7 +15,11 @@ import numpy as np
 from main import app, clear_previous_session
 from app.models import ScreenshotMetadata
 from app.services.claude_service import ClaudeService
-from app.services.search_service import SearchService
+# Try to import the full ML search service, fallback to simple version
+try:
+    from app.services.search_service import SearchService
+except ImportError:
+    from app.services.simple_search_service import SimpleSearchService as SearchService
 from app.services.evaluation_service import EvaluationService
 from app.services.prompt_manager import PromptManager
 from app.config import settings

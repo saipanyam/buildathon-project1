@@ -1,8 +1,8 @@
 {
   "ocr_and_visual": {
     "prompt": "Analyze this screenshot and provide a JSON response with the following structure:\n\n{\n  \"extracted_text\": \"Extract ALL visible text from the image, preserving the exact wording\",\n  \"visual_description\": \"Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors.\"\n}\n\nFor the visual description, focus on:\n- What type of content/interface this is (document, website, app, etc.)\n- What the main content or purpose appears to be\n- Key information or data being displayed\n- What actions or interactions are available\n- Overall context and meaning\n\nBe thorough and accurate. Return only valid JSON.",
-    "version": "16.0",
-    "created_at": "2025-08-16T14:54:37.234449",
+    "version": "24.0",
+    "created_at": "2025-08-16T15:17:47.233373",
     "quality_scores": [],
     "versions": [
       {
@@ -725,6 +725,226 @@
         "created_at": "2025-08-16T14:54:37.231628",
         "quality_scores": [],
         "archived_at": "2025-08-16T14:54:37.234446"
+      },
+      {
+        "version": "16.0",
+        "prompt": "Analyze this screenshot and provide a JSON response with the following structure:\n\n{\n  \"extracted_text\": \"Extract ALL visible text from the image, preserving the exact wording\",\n  \"visual_description\": \"Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors.\"\n}\n\nFor the visual description, focus on:\n- What type of content/interface this is (document, website, app, etc.)\n- What the main content or purpose appears to be\n- Key information or data being displayed\n- What actions or interactions are available\n- Overall context and meaning\n\nBe thorough and accurate. Return only valid JSON.",
+        "created_at": "2025-08-16T14:54:37.234449",
+        "quality_scores": [
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:11:24.086034",
+            "metadata": {
+              "filename": "test.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:11:24.384734",
+            "metadata": {
+              "filename": "valid1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:11:24.395144",
+            "metadata": {
+              "filename": "valid2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.4,
+            "timestamp": "2025-08-16T15:11:26.829348",
+            "metadata": {
+              "filename": "image1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.33,
+            "timestamp": "2025-08-16T15:11:29.485846",
+            "metadata": {
+              "filename": "image2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          }
+        ],
+        "archived_at": "2025-08-16T15:11:29.577336"
+      },
+      {
+        "version": "17.0",
+        "prompt": "Test prompt for extraction",
+        "created_at": "2025-08-16T15:11:29.577350",
+        "quality_scores": [],
+        "archived_at": "2025-08-16T15:11:29.580530"
+      },
+      {
+        "version": "18.0",
+        "prompt": "Analyze this screenshot and provide a JSON response with the following structure:\n\n{\n  \"extracted_text\": \"Extract ALL visible text from the image, preserving the exact wording\",\n  \"visual_description\": \"Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors.\"\n}\n\nFor the visual description, focus on:\n- What type of content/interface this is (document, website, app, etc.)\n- What the main content or purpose appears to be\n- Key information or data being displayed\n- What actions or interactions are available\n- Overall context and meaning\n\nBe thorough and accurate. Return only valid JSON.",
+        "created_at": "2025-08-16T15:11:29.580533",
+        "quality_scores": [
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:14:50.856651",
+            "metadata": {
+              "filename": "test.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:14:50.980021",
+            "metadata": {
+              "filename": "valid1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:14:50.981132",
+            "metadata": {
+              "filename": "valid2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.46,
+            "timestamp": "2025-08-16T15:14:53.829194",
+            "metadata": {
+              "filename": "image1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.37,
+            "timestamp": "2025-08-16T15:14:56.285313",
+            "metadata": {
+              "filename": "image2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          }
+        ],
+        "archived_at": "2025-08-16T15:14:56.294816"
+      },
+      {
+        "version": "19.0",
+        "prompt": "Test prompt for extraction",
+        "created_at": "2025-08-16T15:14:56.294823",
+        "quality_scores": [],
+        "archived_at": "2025-08-16T15:14:56.297435"
+      },
+      {
+        "version": "20.0",
+        "prompt": "Analyze this screenshot and provide a JSON response with the following structure:\n\n{\n  \"extracted_text\": \"Extract ALL visible text from the image, preserving the exact wording\",\n  \"visual_description\": \"Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors.\"\n}\n\nFor the visual description, focus on:\n- What type of content/interface this is (document, website, app, etc.)\n- What the main content or purpose appears to be\n- Key information or data being displayed\n- What actions or interactions are available\n- Overall context and meaning\n\nBe thorough and accurate. Return only valid JSON.",
+        "created_at": "2025-08-16T15:14:56.297438",
+        "quality_scores": [
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:16:31.999243",
+            "metadata": {
+              "filename": "test.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:16:32.115691",
+            "metadata": {
+              "filename": "valid1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:16:32.116610",
+            "metadata": {
+              "filename": "valid2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.41,
+            "timestamp": "2025-08-16T15:16:34.947371",
+            "metadata": {
+              "filename": "image1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.41,
+            "timestamp": "2025-08-16T15:16:37.447248",
+            "metadata": {
+              "filename": "image2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          }
+        ],
+        "archived_at": "2025-08-16T15:16:37.461738"
+      },
+      {
+        "version": "21.0",
+        "prompt": "Test prompt for extraction",
+        "created_at": "2025-08-16T15:16:37.461745",
+        "quality_scores": [],
+        "archived_at": "2025-08-16T15:16:37.465074"
+      },
+      {
+        "version": "22.0",
+        "prompt": "Analyze this screenshot and provide a JSON response with the following structure:\n\n{\n  \"extracted_text\": \"Extract ALL visible text from the image, preserving the exact wording\",\n  \"visual_description\": \"Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors.\"\n}\n\nFor the visual description, focus on:\n- What type of content/interface this is (document, website, app, etc.)\n- What the main content or purpose appears to be\n- Key information or data being displayed\n- What actions or interactions are available\n- Overall context and meaning\n\nBe thorough and accurate. Return only valid JSON.",
+        "created_at": "2025-08-16T15:16:37.465078",
+        "quality_scores": [
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:17:41.941775",
+            "metadata": {
+              "filename": "test.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:17:42.242712",
+            "metadata": {
+              "filename": "valid1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.29,
+            "timestamp": "2025-08-16T15:17:42.251953",
+            "metadata": {
+              "filename": "valid2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.41,
+            "timestamp": "2025-08-16T15:17:44.641326",
+            "metadata": {
+              "filename": "image1.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          },
+          {
+            "score": 0.33,
+            "timestamp": "2025-08-16T15:17:47.131446",
+            "metadata": {
+              "filename": "image2.png",
+              "file_hash": "9cd53a2f405bebbac4a21dded0f12e34"
+            }
+          }
+        ],
+        "archived_at": "2025-08-16T15:17:47.227736"
+      },
+      {
+        "version": "23.0",
+        "prompt": "Test prompt for extraction",
+        "created_at": "2025-08-16T15:17:47.227767",
+        "quality_scores": [],
+        "archived_at": "2025-08-16T15:17:47.233370"
       }
     ]
   }
