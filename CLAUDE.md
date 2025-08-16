@@ -10,13 +10,13 @@ Visual Memory Search
 
   Requirements:
 
-  • Accept folder of screenshots
+  - Accept folder of screenshots
 
-  • Extract both OCR text AND visual descriptions
+  - Extract both OCR text AND visual descriptions
 
-  • Handle queries like "error message about auth" OR "screenshot with blue button"
-  
-  • Return top 5 matches with confidence scores
+  - Handle queries like "error message about auth" OR "screenshot with blue button"
+
+  - Return top 5 matches with confidence scores
 
 ## Repository Structure
 
