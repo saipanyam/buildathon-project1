@@ -142,12 +142,15 @@ class EvaluationService:
             score = 3
             reasoning = f"Minimal text extracted ({word_count} words)"
             suggestions.append("Verify if all visible text areas are being processed")
-        elif text_length < 200:
+        elif text_length < 150:
             score = 6
             reasoning = f"Moderate amount of text extracted ({word_count} words)"
             suggestions.append("Check for text in headers, footers, or sidebars that might be missed")
+        elif text_length < 300:
+            score = 8
+            reasoning = f"Good amount of text extracted ({word_count} words)"
         else:
-            score = 9
+            score = 10
             reasoning = f"Substantial text extracted ({word_count} words)"
         
         # Check for common UI text patterns
@@ -347,14 +350,14 @@ class EvaluationService:
         )
     
     def _get_quality_level(self, confidence_score: float) -> str:
-        """Determine quality level based on confidence score"""
-        if confidence_score >= 90:
+        """Determine quality level based on confidence score (adjusted for Claude 3 Opus quality)"""
+        if confidence_score >= 80:
             return "Excellent"
-        elif confidence_score >= 75:
+        elif confidence_score >= 65:
             return "Good"
-        elif confidence_score >= 60:
+        elif confidence_score >= 50:
             return "Fair"
-        elif confidence_score >= 40:
+        elif confidence_score >= 35:
             return "Poor"
         else:
             return "Very Poor"
