@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Search, Image, FileText, Loader2, Zap, BarChart3, Grid3x3, List } from 'lucide-react';
 import UnifiedUpload from './components/UnifiedUpload';
@@ -16,14 +16,14 @@ function AppContent() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
-  const [hasUploadedFiles, setHasUploadedFiles] = useState(false);
+  const [, setHasUploadedFiles] = useState(false);
   const [currentQuery, setCurrentQuery] = useState('');
   const [viewMode, setViewMode] = useState<'carousel' | 'list'>('carousel');
   const [showingSearchResults, setShowingSearchResults] = useState(false);
   const [showFeatureBoxes, setShowFeatureBoxes] = useState(true);
 
 
-  const handleUploadComplete = useCallback((files: any[]) => {
+  const handleUploadComplete = useCallback((_files: any[]) => {
     // Clear any previous results to start a new session
     setAllResults([]);
     setSearchResults([]);
@@ -92,9 +92,9 @@ function AppContent() {
     setCurrentQuery('');
   }, []);
 
-  const toggleViewMode = useCallback(() => {
-    setViewMode(prev => prev === 'carousel' ? 'list' : 'carousel');
-  }, []);
+  // const toggleViewMode = useCallback(() => {
+  //   setViewMode(prev => prev === 'carousel' ? 'list' : 'carousel');
+  // }, []);
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -176,7 +176,6 @@ function AppContent() {
         {/* Search functionality removed - show only extraction results */}
 
         {/* Features - Show until we have actual extraction results */}
-        {console.log('Feature boxes debug:', { showFeatureBoxes, allResultsLength: allResults.length, isProcessing })}
         {showFeatureBoxes && (
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Text Extraction Feature Card */}

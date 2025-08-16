@@ -107,7 +107,7 @@ const ImprovedExtractionCard: React.FC<ImprovedExtractionCardProps> = ({ result,
                 src={imageUrl}
                 alt={result.filename}
                 className="w-full h-full object-contain cursor-pointer"
-                onError={(e) => {
+                onError={(_e) => {
                 console.error(`Failed to load image: ${imageUrl}`);
                 setImageError(true);
               }}

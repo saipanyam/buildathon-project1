@@ -72,7 +72,7 @@ const ExtractionCard: React.FC<ExtractionCardProps> = ({ result, index }) => {
               src={imageUrl}
               alt={result.filename}
               className="w-full h-full object-contain"
-              onError={(e) => {
+              onError={(_e) => {
                 console.error(`Failed to load image in ExtractionCard: ${imageUrl}`);
                 setImageError(true);
               }}
