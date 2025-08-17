@@ -54,11 +54,19 @@ function AppContent() {
 
     // Poll for results with exponential backoff
     const pollForResults = async (attempt = 1, maxAttempts = 10) => {
+      console.log(`🔄 Polling for results - attempt ${attempt}/${maxAttempts}`);
       try {
         const results = await searchScreenshots(''); // Get all results
+        console.log(`📊 Poll result:`, { 
+          attempt, 
+          resultCount: results.length, 
+          processing: isProcessing,
+          showingFeatureBoxes: showFeatureBoxes
+        });
         
         if (results.length > 0) {
           // We have results! 
+          console.log('✅ Found results, updating state');
           setAllResults(results);
           setIsProcessing(false);
           setExtractionProgress(0);
@@ -66,19 +74,22 @@ function AppContent() {
         } else if (attempt < maxAttempts) {
           // No results yet, try again with exponential backoff
           const delay = Math.min(1000 * Math.pow(1.5, attempt - 1), 5000); // 1s, 1.5s, 2.25s, 3.37s, 5s max
+          console.log(`⏳ No results yet, retrying in ${delay}ms`);
           setTimeout(() => pollForResults(attempt + 1, maxAttempts), delay);
         } else {
           // Max attempts reached, stop processing but don't show error
-          console.log('Processing complete but no results found after polling');
+          console.log('⚠️ Processing complete but no results found after polling');
           setIsProcessing(false);
           setExtractionProgress(0);
         }
       } catch (error) {
-        console.error('Failed to load results:', error);
+        console.error('❌ Failed to load results:', error);
         if (attempt < maxAttempts) {
           // Retry on error too
+          console.log(`🔄 Retrying after error in 2000ms`);
           setTimeout(() => pollForResults(attempt + 1, maxAttempts), 2000);
         } else {
+          console.log('❌ Max attempts reached, stopping polling');
           setIsProcessing(false);
           setExtractionProgress(0);
         }
@@ -88,6 +99,19 @@ function AppContent() {
     // Start polling after a short initial delay
     setTimeout(() => pollForResults(), 2000);
   }, []);
+
+  // Manual refresh function for debugging
+  const handleManualRefresh = async () => {
+    console.log('🔄 Manual refresh triggered');
+    try {
+      const results = await searchScreenshots('');
+      console.log('📊 Manual refresh results:', { count: results.length, results });
+      setAllResults(results);
+      setShowFeatureBoxes(false);
+    } catch (error) {
+      console.error('❌ Manual refresh error:', error);
+    }
+  };
 
   const handleSearch = useCallback(async (query: string) => {
     setIsSearching(true);
@@ -128,7 +152,15 @@ function AppContent() {
       <div className="relative z-10 container mx-auto px-6 py-16 max-w-7xl">
         {/* Header */}
         <header className="text-center mb-12 relative">
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4 flex gap-2">
+            <button
+              onClick={handleManualRefresh}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 border border-red-500 hover:border-red-400 rounded-lg transition-all text-white"
+              title="Manual Refresh Results"
+            >
+              <Search className="w-4 h-4" />
+              Debug: Load Results
+            </button>
             <button
               onClick={() => window.open('http://localhost:3001', '_blank')}
               className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600 hover:border-gray-500 rounded-lg transition-all text-gray-300 hover:text-white"

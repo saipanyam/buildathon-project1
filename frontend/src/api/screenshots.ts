@@ -26,8 +26,19 @@ export const uploadScreenshots = async (files: File[]): Promise<UploadResponse> 
 };
 
 export const searchScreenshots = async (query: string): Promise<SearchResult[]> => {
-  const response = await api.post<SearchResult[]>('/search', { query });
-  return response.data;
+  console.log('🔍 API Call: searchScreenshots', { query, baseURL: api.defaults.baseURL });
+  try {
+    const response = await api.post<SearchResult[]>('/search', { query });
+    console.log('✅ Search API Response:', { 
+      status: response.status, 
+      resultCount: response.data.length,
+      results: response.data.map(r => r.filename)
+    });
+    return response.data;
+  } catch (error) {
+    console.error('❌ Search API Error:', error);
+    throw error;
+  }
 };
 
 export const processFolder = async (folderPath: string): Promise<UploadResponse> => {
