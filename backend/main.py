@@ -70,11 +70,24 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://localhost:5173",
+        "https://vms-yantra-41d3ce9df9a6.herokuapp.com",  # Production frontend
+        "http://localhost:8000"  # Same-origin for backend serving frontend
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add request logging middleware for debugging
+@app.middleware("http")
+async def log_requests(request, call_next):
+    print(f"🌐 {request.method} {request.url.path} from {request.headers.get('origin', 'no-origin')}")
+    response = await call_next(request)
+    print(f"✅ Response: {response.status_code}")
+    return response
 
 UPLOAD_DIR = Path("uploads")
 PROCESSED_DIR = Path("processed")
