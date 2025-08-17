@@ -137,6 +137,19 @@ class ClaudeService:
                     if isinstance(extracted_text, dict):
                         extracted_text = str(extracted_text)
                     
+                    # Clean field names from the beginning of values if they appear
+                    if extracted_text.lower().startswith("extracted_text:"):
+                        extracted_text = extracted_text[15:].strip()
+                    elif extracted_text.lower().startswith("ocr_text:"):
+                        extracted_text = extracted_text[9:].strip()
+                    elif extracted_text.lower().startswith("text:"):
+                        extracted_text = extracted_text[5:].strip()
+                    
+                    if visual_description.lower().startswith("visual_description:"):
+                        visual_description = visual_description[19:].strip()
+                    elif visual_description.lower().startswith("description:"):
+                        visual_description = visual_description[12:].strip()
+                    
                     print(f"JSON parsing successful: OCR={len(extracted_text)}, Visual={len(visual_description)}")
                     return extracted_text, visual_description
                 except json.JSONDecodeError as e:
@@ -157,6 +170,31 @@ class ClaudeService:
                         if len(parts) > 1:
                             visual_description = parts[1].strip()
                     
+                    # Also handle "extracted_text:" patterns in fallback parsing
+                    if "extracted_text:" in content.lower():
+                        parts = content.lower().split("extracted_text:")
+                        if len(parts) > 1:
+                            text_part = parts[1].split("visual_description:")[0] if "visual_description:" in parts[1] else parts[1]
+                            extracted_text = text_part.strip()
+                    
+                    if "visual_description:" in content.lower():
+                        parts = content.lower().split("visual_description:")
+                        if len(parts) > 1:
+                            visual_description = parts[1].strip()
+                    
+                    # Clean any remaining field prefixes from extracted values
+                    if extracted_text.lower().startswith("extracted_text:"):
+                        extracted_text = extracted_text[15:].strip()
+                    elif extracted_text.lower().startswith("ocr_text:"):
+                        extracted_text = extracted_text[9:].strip()
+                    elif extracted_text.lower().startswith("text:"):
+                        extracted_text = extracted_text[5:].strip()
+                    
+                    if visual_description.lower().startswith("visual_description:"):
+                        visual_description = visual_description[19:].strip()
+                    elif visual_description.lower().startswith("description:"):
+                        visual_description = visual_description[12:].strip()
+                    
                     # If still empty, try more flexible parsing
                     if not extracted_text and not visual_description:
                         print("Fallback parsing also failed, trying flexible approach...")
@@ -171,10 +209,12 @@ class ClaudeService:
                             for line in substantial_lines:
                                 # If line looks like extracted text (short, factual)
                                 if any(keyword in line.lower() for keyword in ['text:', 'ocr:', 'extracted:', 'content:']):
-                                    text_lines.append(line.split(':', 1)[-1].strip())
+                                    cleaned_line = line.split(':', 1)[-1].strip()
+                                    text_lines.append(cleaned_line)
                                 # If line looks like description (longer, descriptive)
                                 elif any(keyword in line.lower() for keyword in ['description:', 'visual:', 'image:', 'shows:', 'displays:']):
-                                    desc_lines.append(line.split(':', 1)[-1].strip())
+                                    cleaned_line = line.split(':', 1)[-1].strip()
+                                    desc_lines.append(cleaned_line)
                                 # Default: treat as description if longer than 50 chars, otherwise as text
                                 elif len(line) > 50:
                                     desc_lines.append(line)
@@ -183,6 +223,19 @@ class ClaudeService:
                             
                             extracted_text = ' '.join(text_lines) if text_lines else ""
                             visual_description = ' '.join(desc_lines) if desc_lines else ' '.join(substantial_lines[:2])
+                            
+                            # Final cleaning of any remaining field prefixes
+                            if extracted_text.lower().startswith("extracted_text:"):
+                                extracted_text = extracted_text[15:].strip()
+                            elif extracted_text.lower().startswith("ocr_text:"):
+                                extracted_text = extracted_text[9:].strip()
+                            elif extracted_text.lower().startswith("text:"):
+                                extracted_text = extracted_text[5:].strip()
+                            
+                            if visual_description.lower().startswith("visual_description:"):
+                                visual_description = visual_description[19:].strip()
+                            elif visual_description.lower().startswith("description:"):
+                                visual_description = visual_description[12:].strip()
                             print(f"Flexible parsing result: OCR={len(extracted_text)}, Visual={len(visual_description)}")
                     
                     print(f"Fallback parsing result: OCR={len(extracted_text)}, Visual={len(visual_description)}")
