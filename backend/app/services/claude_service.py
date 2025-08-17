@@ -102,13 +102,46 @@ class ClaudeService:
                 
                 # Try to parse JSON response first
                 try:
-                    json_content = json.loads(content)
+                    # Clean the content to handle markdown code blocks or extra text
+                    cleaned_content = content.strip()
+                    
+                    # Remove markdown code blocks if present
+                    if "```json" in cleaned_content:
+                        # Extract JSON from markdown code block
+                        start = cleaned_content.find("```json") + 7
+                        end = cleaned_content.find("```", start)
+                        if end != -1:
+                            cleaned_content = cleaned_content[start:end].strip()
+                    elif "```" in cleaned_content:
+                        # Handle generic code blocks
+                        start = cleaned_content.find("```") + 3
+                        end = cleaned_content.find("```", start)
+                        if end != -1:
+                            cleaned_content = cleaned_content[start:end].strip()
+                    
+                    # Try to find JSON object in the content
+                    if not cleaned_content.startswith("{"):
+                        # Look for the first { and last }
+                        start_pos = cleaned_content.find("{")
+                        end_pos = cleaned_content.rfind("}")
+                        if start_pos != -1 and end_pos != -1 and end_pos > start_pos:
+                            cleaned_content = cleaned_content[start_pos:end_pos+1]
+                    
+                    json_content = json.loads(cleaned_content)
                     extracted_text = json_content.get("extracted_text", json_content.get("ocr_text", ""))
                     visual_description = json_content.get("visual_description", "")
+                    
+                    # Ensure we're getting strings, not nested objects
+                    if isinstance(visual_description, dict):
+                        visual_description = str(visual_description)
+                    if isinstance(extracted_text, dict):
+                        extracted_text = str(extracted_text)
+                    
                     print(f"JSON parsing successful: OCR={len(extracted_text)}, Visual={len(visual_description)}")
                     return extracted_text, visual_description
                 except json.JSONDecodeError as e:
                     print(f"JSON parsing failed: {e}")
+                    print(f"Raw content preview: {content[:500]}...")
                     # Fallback to old format parsing
                     extracted_text = ""
                     visual_description = ""
@@ -131,9 +164,26 @@ class ClaudeService:
                         lines = content.strip().split('\n')
                         substantial_lines = [line.strip() for line in lines if len(line.strip()) > 10]
                         if substantial_lines:
-                            # Use the content as visual description if we can't parse it properly
-                            visual_description = ' '.join(substantial_lines[:3])  # First few substantial lines
-                            print(f"Flexible parsing result: Visual={len(visual_description)}")
+                            # Try to identify which lines are text vs description
+                            text_lines = []
+                            desc_lines = []
+                            
+                            for line in substantial_lines:
+                                # If line looks like extracted text (short, factual)
+                                if any(keyword in line.lower() for keyword in ['text:', 'ocr:', 'extracted:', 'content:']):
+                                    text_lines.append(line.split(':', 1)[-1].strip())
+                                # If line looks like description (longer, descriptive)
+                                elif any(keyword in line.lower() for keyword in ['description:', 'visual:', 'image:', 'shows:', 'displays:']):
+                                    desc_lines.append(line.split(':', 1)[-1].strip())
+                                # Default: treat as description if longer than 50 chars, otherwise as text
+                                elif len(line) > 50:
+                                    desc_lines.append(line)
+                                else:
+                                    text_lines.append(line)
+                            
+                            extracted_text = ' '.join(text_lines) if text_lines else ""
+                            visual_description = ' '.join(desc_lines) if desc_lines else ' '.join(substantial_lines[:2])
+                            print(f"Flexible parsing result: OCR={len(extracted_text)}, Visual={len(visual_description)}")
                     
                     print(f"Fallback parsing result: OCR={len(extracted_text)}, Visual={len(visual_description)}")
                     return extracted_text, visual_description
