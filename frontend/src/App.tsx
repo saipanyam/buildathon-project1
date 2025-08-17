@@ -35,13 +35,57 @@ function AppContent() {
 
   const handleProcessingStart = useCallback(() => {
     // Clear previous results when starting new processing
+    console.log('🚀 Processing started - beginning polling immediately');
     setAllResults([]);
     setIsProcessing(true);
     setExtractionProgress(0);
+    
+    // Start polling immediately when processing starts
+    // This ensures we catch results as soon as they're available
+    const pollForResults = async (attempt = 1, maxAttempts = 20) => {
+      console.log(`🔄 Early polling - attempt ${attempt}/${maxAttempts}`);
+      try {
+        const results = await searchScreenshots('');
+        console.log(`📊 Early poll result:`, { 
+          attempt, 
+          resultCount: results.length
+        });
+        
+        if (results.length > 0) {
+          console.log('✅ Found results during early polling!');
+          setAllResults(results);
+          setIsProcessing(false);
+          setExtractionProgress(100);
+          setShowFeatureBoxes(false);
+          return; // Stop polling
+        } else if (attempt < maxAttempts) {
+          // Poll more frequently at the start, then slow down
+          const delay = attempt <= 5 ? 2000 : 3000;
+          console.log(`⏳ No results yet, retrying in ${delay}ms`);
+          setTimeout(() => pollForResults(attempt + 1, maxAttempts), delay);
+        } else {
+          console.log('⚠️ Max early polling attempts reached');
+          setIsProcessing(false);
+        }
+      } catch (error) {
+        console.error('❌ Early polling error:', error);
+        if (attempt < maxAttempts) {
+          setTimeout(() => pollForResults(attempt + 1, maxAttempts), 3000);
+        }
+      }
+    };
+    
+    // Start polling after a brief delay to let upload complete
+    setTimeout(() => pollForResults(), 1000);
   }, []);
 
   const handleProcessingComplete = useCallback(async () => {
-    // Simulate extraction progress
+    console.log('📦 Processing complete callback - polling should already be running');
+    // Processing complete is called after upload finishes
+    // But polling already started in handleProcessingStart
+    // Just update the progress to show completion
+    
+    // Simulate final extraction progress
     const progressInterval = setInterval(() => {
       setExtractionProgress(prev => {
         if (prev >= 90) {
@@ -50,55 +94,27 @@ function AppContent() {
         }
         return prev + 10;
       });
-    }, 500);
-
-    // Poll for results with exponential backoff
-    const pollForResults = async (attempt = 1, maxAttempts = 10) => {
-      console.log(`🔄 Polling for results - attempt ${attempt}/${maxAttempts}`);
-      try {
-        const results = await searchScreenshots(''); // Get all results
-        console.log(`📊 Poll result:`, { 
-          attempt, 
-          resultCount: results.length, 
-          processing: isProcessing,
-          showingFeatureBoxes: showFeatureBoxes
+    }, 200);
+    
+    // The polling is already happening from handleProcessingStart
+    // Just ensure the UI shows we're done processing
+    setTimeout(() => {
+      if (allResults.length === 0) {
+        console.log('⚠️ No results loaded yet after processing complete');
+        // Try one more manual search
+        searchScreenshots('').then(results => {
+          if (results.length > 0) {
+            console.log('✅ Final check found results:', results.length);
+            setAllResults(results);
+            setIsProcessing(false);
+            setShowFeatureBoxes(false);
+          }
+        }).catch(err => {
+          console.error('❌ Final check failed:', err);
         });
-        
-        if (results.length > 0) {
-          // We have results! 
-          console.log('✅ Found results, updating state');
-          setAllResults(results);
-          setIsProcessing(false);
-          setExtractionProgress(0);
-          setShowFeatureBoxes(false);
-        } else if (attempt < maxAttempts) {
-          // No results yet, try again with exponential backoff
-          const delay = Math.min(1000 * Math.pow(1.5, attempt - 1), 5000); // 1s, 1.5s, 2.25s, 3.37s, 5s max
-          console.log(`⏳ No results yet, retrying in ${delay}ms`);
-          setTimeout(() => pollForResults(attempt + 1, maxAttempts), delay);
-        } else {
-          // Max attempts reached, stop processing but don't show error
-          console.log('⚠️ Processing complete but no results found after polling');
-          setIsProcessing(false);
-          setExtractionProgress(0);
-        }
-      } catch (error) {
-        console.error('❌ Failed to load results:', error);
-        if (attempt < maxAttempts) {
-          // Retry on error too
-          console.log(`🔄 Retrying after error in 2000ms`);
-          setTimeout(() => pollForResults(attempt + 1, maxAttempts), 2000);
-        } else {
-          console.log('❌ Max attempts reached, stopping polling');
-          setIsProcessing(false);
-          setExtractionProgress(0);
-        }
       }
-    };
-
-    // Start polling after a short initial delay
-    setTimeout(() => pollForResults(), 2000);
-  }, []);
+    }, 3000);
+  }, [allResults.length]);
 
   // Manual refresh function for debugging
   const handleManualRefresh = async () => {

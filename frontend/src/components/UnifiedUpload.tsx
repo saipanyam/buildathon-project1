@@ -118,9 +118,11 @@ const UnifiedUpload: React.FC<UnifiedUploadProps> = ({
   };
 
   const handleUpload = async (files: File[]) => {
+    console.log('📤 Starting upload of', files.length, 'files');
     setIsUploading(true);
     setUploadStatus('idle');
     setUploadProgress(0);
+    console.log('🎬 Calling onProcessingStart');
     onProcessingStart();
     
     try {
@@ -137,9 +139,12 @@ const UnifiedUpload: React.FC<UnifiedUploadProps> = ({
       setUploadStatus('success');
       const folderText = selectedFolder ? ` from folder "${selectedFolder}"` : '';
       setUploadMessage(`Successfully uploaded ${files.length} images${folderText}`);
+      console.log('📥 Upload successful, calling onUploadComplete');
       onUploadComplete(response.files);
       
+      console.log('⏰ Will call onProcessingComplete in 2 seconds');
       setTimeout(() => {
+        console.log('🏁 Calling onProcessingComplete');
         onProcessingComplete();
       }, 2000);
     } catch (error) {
