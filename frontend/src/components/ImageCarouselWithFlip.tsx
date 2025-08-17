@@ -119,6 +119,16 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
     return null;
   }
 
+  // Debug logging
+  console.log('🎠 Carousel Debug:', {
+    resultsLength: results.length,
+    currentIndex,
+    shouldShowNavigation: results.length > 3,
+    canGoNext,
+    canGoPrev,
+    results: results.map(r => r.filename)
+  });
+
   // Calculate visible slides (3 cards at a time, but don't duplicate if fewer results)
   const visibleResults = results.length <= 3 
     ? results // Show all results if 3 or fewer, no duplication
@@ -139,31 +149,30 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
       </div>
 
       <div className="relative">
+        {/* Debug indicator */}
+        {results.length > 3 && (
+          <div className="absolute top-0 left-0 bg-green-500 text-white text-xs px-2 py-1 z-30 rounded">
+            NAV: {results.length} items
+          </div>
+        )}
+        
         {/* Navigation Buttons */}
         {results.length > 3 && (
           <>
             <button
               onClick={prevSlide}
-              className={`absolute -left-4 top-1/2 -translate-y-1/2 z-20 border rounded-full p-3 transition-all shadow-lg ${
-                canGoPrev 
-                  ? 'bg-red-600 hover:bg-red-700 border-red-500 hover:border-red-400' 
-                  : 'bg-gray-800/50 border-gray-700 cursor-not-allowed opacity-50'
-              }`}
-              disabled={!canGoPrev}
+              className="absolute -left-6 top-1/2 -translate-y-1/2 z-30 bg-red-600 hover:bg-red-700 border-2 border-red-400 rounded-full p-4 transition-all shadow-2xl"
+              style={{ backgroundColor: '#dc2626' }} // Force red color
             >
-              <ChevronLeft className={`w-6 h-6 ${canGoPrev ? 'text-white' : 'text-gray-500'}`} />
+              <ChevronLeft className="w-8 h-8 text-white" />
             </button>
             
             <button
               onClick={nextSlide}
-              className={`absolute -right-4 top-1/2 -translate-y-1/2 z-20 border rounded-full p-3 transition-all shadow-lg ${
-                canGoNext 
-                  ? 'bg-red-600 hover:bg-red-700 border-red-500 hover:border-red-400' 
-                  : 'bg-gray-800/50 border-gray-700 cursor-not-allowed opacity-50'
-              }`}
-              disabled={!canGoNext}
+              className="absolute -right-6 top-1/2 -translate-y-1/2 z-30 bg-red-600 hover:bg-red-700 border-2 border-red-400 rounded-full p-4 transition-all shadow-2xl"
+              style={{ backgroundColor: '#dc2626' }} // Force red color
             >
-              <ChevronRight className={`w-6 h-6 ${canGoNext ? 'text-white' : 'text-gray-500'}`} />
+              <ChevronRight className="w-8 h-8 text-white" />
             </button>
           </>
         )}
