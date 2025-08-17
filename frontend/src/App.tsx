@@ -52,22 +52,41 @@ function AppContent() {
       });
     }, 500);
 
-    // Wait a bit then load all results
-    setTimeout(async () => {
+    // Poll for results with exponential backoff
+    const pollForResults = async (attempt = 1, maxAttempts = 10) => {
       try {
         const results = await searchScreenshots(''); // Get all results
-        setAllResults(results);
-        setIsProcessing(false);
-        setExtractionProgress(0);
-        // Hide feature boxes only when we have actual results
+        
         if (results.length > 0) {
+          // We have results! 
+          setAllResults(results);
+          setIsProcessing(false);
+          setExtractionProgress(0);
           setShowFeatureBoxes(false);
+        } else if (attempt < maxAttempts) {
+          // No results yet, try again with exponential backoff
+          const delay = Math.min(1000 * Math.pow(1.5, attempt - 1), 5000); // 1s, 1.5s, 2.25s, 3.37s, 5s max
+          setTimeout(() => pollForResults(attempt + 1, maxAttempts), delay);
+        } else {
+          // Max attempts reached, stop processing but don't show error
+          console.log('Processing complete but no results found after polling');
+          setIsProcessing(false);
+          setExtractionProgress(0);
         }
       } catch (error) {
         console.error('Failed to load results:', error);
-        setIsProcessing(false);
+        if (attempt < maxAttempts) {
+          // Retry on error too
+          setTimeout(() => pollForResults(attempt + 1, maxAttempts), 2000);
+        } else {
+          setIsProcessing(false);
+          setExtractionProgress(0);
+        }
       }
-    }, 3000);
+    };
+
+    // Start polling after a short initial delay
+    setTimeout(() => pollForResults(), 2000);
   }, []);
 
   const handleSearch = useCallback(async (query: string) => {
@@ -160,7 +179,7 @@ function AppContent() {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-sm text-gray-400">
-                <span>Analyzing visual memories...</span>
+                <span>AI is analyzing your images and extracting visual memories...</span>
                 <span>{extractionProgress}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2">
