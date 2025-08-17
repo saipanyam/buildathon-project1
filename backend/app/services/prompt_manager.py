@@ -15,6 +15,12 @@ class PromptManager:
   "visual_description": "Describe what this image shows - the content, purpose, and context. Focus on what the user would see and understand from this image, not the styling or colors."
 }
 
+IMPORTANT: 
+- Replace the placeholder text with actual content
+- The "extracted_text" value should contain ONLY the text found in the image, not field names or JSON syntax
+- The "visual_description" value should contain ONLY the description text, not field names or JSON syntax
+- Return valid, properly formatted JSON that can be parsed
+
 For the visual description, focus on:
 - What type of content/interface this is (document, website, app, etc.)
 - What the main content or purpose appears to be

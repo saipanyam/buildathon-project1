@@ -126,6 +126,11 @@ class ClaudeService:
                         end_pos = cleaned_content.rfind("}")
                         if start_pos != -1 and end_pos != -1 and end_pos > start_pos:
                             cleaned_content = cleaned_content[start_pos:end_pos+1]
+                        else:
+                            # Handle case where response is just key-value pairs without proper JSON structure
+                            if '"extracted_text":' in cleaned_content and '"visual_description":' in cleaned_content:
+                                # Try to construct proper JSON from malformed response
+                                cleaned_content = "{" + cleaned_content + "}"
                     
                     json_content = json.loads(cleaned_content)
                     extracted_text = json_content.get("extracted_text", json_content.get("ocr_text", ""))
@@ -155,6 +160,29 @@ class ClaudeService:
                 except json.JSONDecodeError as e:
                     print(f"JSON parsing failed: {e}")
                     print(f"Raw content preview: {content[:500]}...")
+                    
+                    # Try to extract values from JSON-like text format
+                    extracted_text = ""
+                    visual_description = ""
+                    
+                    # Look for quoted values after field names
+                    import re
+                    
+                    # Extract extracted_text value
+                    text_match = re.search(r'"extracted_text":\s*"([^"]*(?:\\.[^"]*)*)"', content, re.DOTALL)
+                    if text_match:
+                        extracted_text = text_match.group(1).replace('\\"', '"').replace('\\n', '\n')
+                    
+                    # Extract visual_description value  
+                    desc_match = re.search(r'"visual_description":\s*"([^"]*(?:\\.[^"]*)*)"', content, re.DOTALL)
+                    if desc_match:
+                        visual_description = desc_match.group(1).replace('\\"', '"').replace('\\n', '\n')
+                    
+                    # If we found values using regex, return them
+                    if extracted_text or visual_description:
+                        print(f"Regex extraction successful: OCR={len(extracted_text)}, Visual={len(visual_description)}")
+                        return extracted_text, visual_description
+                    
                     # Fallback to old format parsing
                     extracted_text = ""
                     visual_description = ""
