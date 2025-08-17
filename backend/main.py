@@ -320,7 +320,7 @@ async def process_screenshots(files: List[dict]):
 async def search_screenshots(query: SearchQuery):
     """Search through processed screenshots"""
     search_service = app.state.search_service
-    results = search_service.search(query.query, top_k=5)
+    results = search_service.search(query.query, top_k=settings.SEARCH_MAX_RESULTS)
     return results
 
 @app.get("/status")
