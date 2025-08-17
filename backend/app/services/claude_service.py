@@ -41,7 +41,7 @@ class ClaudeService:
                 print("⚠️  Creating fallback service without Claude client")
                 self.client = None
         
-        self.model = settings.MODEL_NAME  # Use configured model for optimal extraction
+        self.model = settings.get_model_name()  # Use environment-appropriate model
         self.prompt_manager = PromptManager()
         print(f"🤖 Claude service initialized with model: {self.model}")
     
@@ -73,7 +73,7 @@ class ClaudeService:
             try:
                 response = self.client.messages.create(
                     model=self.model,
-                    max_tokens=2000,
+                    max_tokens=1000,  # Reduced for faster processing
                     timeout=settings.CLAUDE_API_TIMEOUT,
                     messages=[
                         {

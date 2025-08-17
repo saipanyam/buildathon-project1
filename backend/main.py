@@ -237,7 +237,11 @@ async def process_screenshots(files: List[dict]):
         
         try:
             print(f"Calling Claude API for {file_path}")
-            ocr_text, visual_description = await claude_service.analyze_screenshot(str(file_path))
+            # Add asyncio timeout to prevent hanging
+            ocr_text, visual_description = await asyncio.wait_for(
+                claude_service.analyze_screenshot(str(file_path)),
+                timeout=25.0  # 25 second timeout to stay under Heroku's 30s limit
+            )
             print(f"Claude API response: OCR length={len(ocr_text) if ocr_text else 0}, Visual length={len(visual_description) if visual_description else 0}")
             
             # Provide fallback descriptions for empty results
@@ -247,8 +251,14 @@ async def process_screenshots(files: List[dict]):
                 visual_description = f"Image uploaded: {file_info['filename']}. Analysis could not be completed."
             elif not visual_description:
                 visual_description = f"Image file: {file_info['filename']}"
+                
+        except asyncio.TimeoutError:
+            print(f"❌ Timeout processing {file_info['filename']} - using fallback description")
+            ocr_text = ""
+            visual_description = f"Image uploaded: {file_info['filename']}. Processing timed out, basic indexing applied."
             
-            # Evaluate the extraction quality
+        # Evaluate the extraction quality (moved outside try block)
+        try:
             print("Starting evaluation...")
             print(f"Debug: Evaluating with OCR='{ocr_text[:100]}...', Visual='{visual_description[:100]}...'")
             evaluation = evaluation_service.evaluate_extraction(ocr_text, visual_description)
@@ -277,7 +287,21 @@ async def process_screenshots(files: List[dict]):
             search_service.index_screenshot(metadata)
             
         except Exception as e:
-            print(f"Error processing {file_info['filename']}: {str(e)}")
+            print(f"❌ Error processing {file_info['filename']}: {str(e)}")
+            # Still index with minimal information for search
+            try:
+                minimal_metadata = ScreenshotMetadata(
+                    filename=file_info["filename"],
+                    file_hash=file_info["hash"],
+                    ocr_text="",
+                    visual_description=f"Image uploaded: {file_info['filename']}. Processing failed: {str(e)[:100]}",
+                    processed_at=datetime.utcnow(),
+                    evaluation={"confidence_score": 0.1, "quality_level": "Failed"}
+                )
+                search_service.index_screenshot(minimal_metadata)
+                print(f"✅ Indexed {file_info['filename']} with minimal metadata")
+            except Exception as index_error:
+                print(f"❌ Failed to index {file_info['filename']}: {index_error}")
 
 @app.post("/search", response_model=List[SearchResult])
 async def search_screenshots(query: SearchQuery):

@@ -28,8 +28,15 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str = ""
     GITHUB_PERSONAL_ACCESS_TOKEN: Optional[str] = None
     
-    # Model Settings - Claude 3 Opus for superior visual analysis and extraction
-    MODEL_NAME: str = "claude-3-opus-20240229"
+    # Model Settings - Use Claude 3.5 Sonnet for faster processing in production  
+    MODEL_NAME: str = "claude-3-5-sonnet-20241022"  # Faster than Opus, still excellent quality
+    
+    # Environment-specific model selection
+    def get_model_name(self) -> str:
+        """Get model name based on environment - faster models for production"""
+        if os.environ.get('HEROKU_APP_NAME') or self.APP_ENV == 'production':
+            return "claude-3-5-sonnet-20241022"  # Fastest for production
+        return self.MODEL_NAME
     
     # Application Settings
     APP_ENV: str = "development"
@@ -53,9 +60,9 @@ class Settings(BaseSettings):
     SEARCH_MIN_SCORE: float = 0.3
     SEARCH_MAX_RESULTS: int = 50
     
-    # API Timeout Settings
-    CLAUDE_API_TIMEOUT: float = 45.0
-    CLAUDE_CLIENT_TIMEOUT: float = 60.0
+    # API Timeout Settings - Reduced for Heroku H12 timeout prevention
+    CLAUDE_API_TIMEOUT: float = 20.0  # Reduced from 45s to avoid Heroku timeouts
+    CLAUDE_CLIENT_TIMEOUT: float = 25.0  # Reduced from 60s
     CLAUDE_MAX_RETRIES: int = 3
     CLAUDE_RETRY_DELAY: float = 1.0
     
