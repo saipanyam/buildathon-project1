@@ -62,10 +62,16 @@ class SearchService:
                 elif visual_scores[idx] > text_scores[idx] * 1.5:
                     match_type = "visual"
                 
+                # Use evaluation confidence score if available, otherwise use search score
+                if screenshot.evaluation and 'confidence_score' in screenshot.evaluation:
+                    confidence_score = screenshot.evaluation['confidence_score']  # Already a ratio (0-1)
+                else:
+                    confidence_score = float(combined_scores[idx])  # Fallback to search score
+                
                 results.append(SearchResult(
                     filename=screenshot.filename,
                     file_hash=screenshot.file_hash,
-                    score=float(combined_scores[idx]),
+                    score=confidence_score,
                     ocr_text=screenshot.ocr_text,  # Return full text
                     visual_description=screenshot.visual_description,  # Return full description
                     processed_at=screenshot.processed_at,

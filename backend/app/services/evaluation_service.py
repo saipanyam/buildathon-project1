@@ -84,22 +84,29 @@ class EvaluationService:
         # Calculate weighted scores
         for eval_result, criteria in zip(evaluations, self.rubric):
             if eval_result.max_score > 0:
-                weighted_score = (eval_result.score / eval_result.max_score) * criteria.weight * 100
+                # Calculate as ratio (0-1) then weight it
+                score_ratio = eval_result.score / eval_result.max_score
+                weighted_score = score_ratio * criteria.weight
                 total_score += weighted_score
-            max_total_score += criteria.weight * 100
+            max_total_score += criteria.weight
         
-        # Overall confidence score
-        confidence_score = total_score / max_total_score if max_total_score > 0 else 0
+        # Overall confidence score (as ratio 0-1)
+        confidence_score = (total_score / max_total_score) if max_total_score > 0 else 0
         
         # Ensure confidence_score is not NaN
         if confidence_score != confidence_score:  # NaN check
             confidence_score = 0
             
         # Debug evaluation scoring
-        print(f"Evaluation debug: total_score={total_score}, max_total_score={max_total_score}, confidence_score={confidence_score}")
+        print(f"Evaluation debug: total_score={total_score:.3f}, max_total_score={max_total_score:.3f}, confidence_score={confidence_score:.3f} ({confidence_score*100:.1f}%)")
         for i, (eval_result, criteria) in enumerate(zip(evaluations, self.rubric)):
-            weighted_score = (eval_result.score / eval_result.max_score) * criteria.weight * 100 if eval_result.max_score > 0 else 0
-            print(f"  {criteria.name}: {eval_result.score}/{eval_result.max_score} = {weighted_score:.1f}% (weight: {criteria.weight*100}%)")
+            if eval_result.max_score > 0:
+                score_ratio = eval_result.score / eval_result.max_score
+                weighted_score = score_ratio * criteria.weight
+                percentage = score_ratio * 100
+                print(f"  {criteria.name}: {eval_result.score}/{eval_result.max_score} = {percentage:.1f}% (weighted: {weighted_score:.3f}, weight: {criteria.weight*100:.0f}%)")
+            else:
+                print(f"  {criteria.name}: {eval_result.score}/{eval_result.max_score} = 0% (max_score is 0)")
             print(f"    Reasoning: {eval_result.reasoning}")
         
         # Generate overall suggestions
@@ -111,7 +118,7 @@ class EvaluationService:
         quality_level = self._get_quality_level(confidence_score)
         
         return {
-            "confidence_score": round(confidence_score, 2),
+            "confidence_score": round(confidence_score, 3),
             "quality_level": quality_level,
             "total_score": round(total_score, 2),
             "max_score": round(max_total_score, 2),
@@ -399,14 +406,14 @@ class EvaluationService:
         )
     
     def _get_quality_level(self, confidence_score: float) -> str:
-        """Determine quality level based on confidence score (adjusted for Claude 3 Opus quality)"""
-        if confidence_score >= 60:
+        """Determine quality level based on confidence score (0-1 ratio, adjusted for Claude 3 Opus quality)"""
+        if confidence_score >= 0.60:
             return "Excellent"
-        elif confidence_score >= 45:
+        elif confidence_score >= 0.45:
             return "Good"
-        elif confidence_score >= 30:
+        elif confidence_score >= 0.30:
             return "Fair"
-        elif confidence_score >= 15:
+        elif confidence_score >= 0.15:
             return "Poor"
         else:
             return "Very Poor"
