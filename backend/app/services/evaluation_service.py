@@ -21,27 +21,27 @@ class EvaluationService:
         self.rubric = [
             EvaluationCriteria(
                 name="Text Completeness",
-                weight=0.25,
+                weight=0.15,  # Reduced from 0.25
                 description="How completely the OCR captures all visible text"
             ),
             EvaluationCriteria(
                 name="Text Accuracy",
-                weight=0.20,
+                weight=0.10,  # Reduced from 0.20
                 description="Accuracy of extracted text without errors or gibberish"
             ),
             EvaluationCriteria(
                 name="Visual Element Coverage",
-                weight=0.20,
+                weight=0.30,  # Increased from 0.20
                 description="How well visual elements (buttons, icons, UI components) are described"
             ),
             EvaluationCriteria(
                 name="Layout Description",
-                weight=0.15,
+                weight=0.20,  # Increased from 0.15
                 description="Quality of spatial relationships and layout description"
             ),
             EvaluationCriteria(
                 name="Color and Style Recognition",
-                weight=0.10,
+                weight=0.15,  # Increased from 0.10
                 description="Accuracy in identifying colors, themes, and visual styles"
             ),
             EvaluationCriteria(
@@ -400,13 +400,13 @@ class EvaluationService:
     
     def _get_quality_level(self, confidence_score: float) -> str:
         """Determine quality level based on confidence score (adjusted for Claude 3 Opus quality)"""
-        if confidence_score >= 70:
+        if confidence_score >= 60:
             return "Excellent"
-        elif confidence_score >= 55:
+        elif confidence_score >= 45:
             return "Good"
-        elif confidence_score >= 40:
+        elif confidence_score >= 30:
             return "Fair"
-        elif confidence_score >= 25:
+        elif confidence_score >= 15:
             return "Poor"
         else:
             return "Very Poor"
