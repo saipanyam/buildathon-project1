@@ -35,7 +35,7 @@ class SearchService:
         self.screenshots.append(screenshot)
         self.embeddings.append(embedding)
     
-    def search(self, query: str, top_k: int = 50) -> List[SearchResult]:
+    def search(self, query: str, top_k: int = 10) -> List[SearchResult]:
         """Search for screenshots matching the query"""
         if not self.screenshots:
             return []

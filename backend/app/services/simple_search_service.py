@@ -20,7 +20,7 @@ class SimpleSearchService:
         self.screenshots = [s for s in self.screenshots if s.file_hash != metadata.file_hash]
         self.screenshots.append(metadata)
     
-    def search(self, query: str, top_k: int = 50) -> List[SearchResult]:
+    def search(self, query: str, top_k: int = 10) -> List[SearchResult]:
         """Simple text-based search"""
         if not query.strip():
             # Return all screenshots when no query provided

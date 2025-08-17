@@ -320,7 +320,18 @@ async def process_screenshots(files: List[dict]):
 async def search_screenshots(query: SearchQuery):
     """Search through processed screenshots"""
     search_service = app.state.search_service
-    results = search_service.search(query.query, top_k=settings.SEARCH_MAX_RESULTS)
+    
+    # Different limits based on query type:
+    # - Empty query (show all): return ALL results (no limit)
+    # - Search query: return top 5 results
+    if not query.query.strip():
+        # Show all results - use a high number to effectively remove limit
+        top_k = 1000  # Effectively unlimited for "show all"
+    else:
+        # Search results - limit to top 5
+        top_k = 5
+    
+    results = search_service.search(query.query, top_k=top_k)
     return results
 
 @app.get("/status")
