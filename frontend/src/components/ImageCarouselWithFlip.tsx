@@ -130,6 +130,11 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
         <h2 className="text-2xl font-bold text-white">{title}</h2>
         <div className="text-sm text-gray-400">
           {results.length} visual {results.length === 1 ? 'memory' : 'memories'}
+          {results.length > 3 && (
+            <span className="text-xs text-red-400 ml-2">
+              • Page {Math.floor(currentIndex / 3) + 1} of {Math.ceil(results.length / 3)}
+            </span>
+          )}
         </div>
       </div>
 
@@ -139,26 +144,26 @@ const ImageCarouselWithFlip: React.FC<ImageCarouselWithFlipProps> = ({ results, 
           <>
             <button
               onClick={prevSlide}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 border rounded-full p-2 transition-all ${
+              className={`absolute -left-4 top-1/2 -translate-y-1/2 z-20 border rounded-full p-3 transition-all shadow-lg ${
                 canGoPrev 
-                  ? 'bg-black/50 hover:bg-black/70 border-gray-600 hover:border-gray-500' 
-                  : 'bg-gray-800/30 border-gray-700 cursor-not-allowed opacity-50'
+                  ? 'bg-red-600 hover:bg-red-700 border-red-500 hover:border-red-400' 
+                  : 'bg-gray-800/50 border-gray-700 cursor-not-allowed opacity-50'
               }`}
               disabled={!canGoPrev}
             >
-              <ChevronLeft className={`w-5 h-5 ${canGoPrev ? 'text-white' : 'text-gray-500'}`} />
+              <ChevronLeft className={`w-6 h-6 ${canGoPrev ? 'text-white' : 'text-gray-500'}`} />
             </button>
             
             <button
               onClick={nextSlide}
-              className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 border rounded-full p-2 transition-all ${
+              className={`absolute -right-4 top-1/2 -translate-y-1/2 z-20 border rounded-full p-3 transition-all shadow-lg ${
                 canGoNext 
-                  ? 'bg-black/50 hover:bg-black/70 border-gray-600 hover:border-gray-500' 
-                  : 'bg-gray-800/30 border-gray-700 cursor-not-allowed opacity-50'
+                  ? 'bg-red-600 hover:bg-red-700 border-red-500 hover:border-red-400' 
+                  : 'bg-gray-800/50 border-gray-700 cursor-not-allowed opacity-50'
               }`}
               disabled={!canGoNext}
             >
-              <ChevronRight className={`w-5 h-5 ${canGoNext ? 'text-white' : 'text-gray-500'}`} />
+              <ChevronRight className={`w-6 h-6 ${canGoNext ? 'text-white' : 'text-gray-500'}`} />
             </button>
           </>
         )}
