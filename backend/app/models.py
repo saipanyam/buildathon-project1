@@ -17,14 +17,10 @@ class ScreenshotMetadata(BaseModel):
 class SearchResult(BaseModel):
     filename: str
     file_hash: str
-    score: float  # Changed from confidence_score for compatibility
+    score: float  # Internal score field
+    confidence_score: float  # Main field for frontend compatibility
     ocr_text: str
     visual_description: str
     processed_at: datetime
     match_type: Optional[str] = "combined"  # "text", "visual", or "combined" 
     evaluation: Optional[Dict[str, Any]] = None
-    
-    # For backward compatibility
-    @property
-    def confidence_score(self):
-        return self.score

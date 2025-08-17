@@ -72,6 +72,7 @@ class SearchService:
                     filename=screenshot.filename,
                     file_hash=screenshot.file_hash,
                     score=confidence_score,
+                    confidence_score=confidence_score,  # Set both fields
                     ocr_text=screenshot.ocr_text,  # Return full text
                     visual_description=screenshot.visual_description,  # Return full description
                     processed_at=screenshot.processed_at,

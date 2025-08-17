@@ -26,12 +26,19 @@ class SimpleSearchService:
             # Return all screenshots when no query provided
             results = []
             for screenshot in self.screenshots:
+                # Use evaluation confidence score if available, otherwise use search score
+                if screenshot.evaluation and 'confidence_score' in screenshot.evaluation:
+                    confidence_score = screenshot.evaluation['confidence_score']  # Already a ratio (0-1)
+                else:
+                    confidence_score = 1.0  # Give all results max score when no search
+                    
                 result = SearchResult(
                     filename=screenshot.filename,
                     file_hash=screenshot.file_hash,
                     ocr_text=screenshot.ocr_text,
                     visual_description=screenshot.visual_description,
-                    score=1.0,  # Give all results max score when no search
+                    score=confidence_score,
+                    confidence_score=confidence_score,
                     processed_at=screenshot.processed_at,
                     evaluation=screenshot.evaluation
                 )
@@ -47,12 +54,19 @@ class SimpleSearchService:
             score = self._calculate_simple_score(query_lower, screenshot)
             
             if score > 0:
+                # Use evaluation confidence score if available, otherwise use search score
+                if screenshot.evaluation and 'confidence_score' in screenshot.evaluation:
+                    confidence_score = screenshot.evaluation['confidence_score']  # Already a ratio (0-1)
+                else:
+                    confidence_score = score  # Use search score as fallback
+                    
                 result = SearchResult(
                     filename=screenshot.filename,
                     file_hash=screenshot.file_hash,
                     ocr_text=screenshot.ocr_text,
                     visual_description=screenshot.visual_description,
                     score=score,
+                    confidence_score=confidence_score,
                     processed_at=screenshot.processed_at,
                     evaluation=screenshot.evaluation
                 )
